@@ -22,7 +22,7 @@ lint-fix:
 ###                        Docker                                           ###
 ###############################################################################
 DOCKER := $(shell which docker)
-DOCKER_IMAGE := mocafoundation/moca-cmd
+DOCKER_IMAGE := mocachain/moca-cmd
 COMMIT_HASH := $(shell git rev-parse --short=7 HEAD)
 DOCKER_TAG := $(COMMIT_HASH)
 
