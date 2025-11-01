@@ -1,0 +1,3 @@
+evmRpcAddr = "http://localhost:8545"
+rpcAddr = "http://localhost:26657"
+chainId = "moca_5151-1"

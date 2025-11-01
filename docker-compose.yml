@@ -1,0 +1,16 @@
+services:
+  cmd:
+    container_name: moca-cmd
+    image: "mocachain/moca-cmd"
+    networks:
+      - moca-network
+    volumes:
+      - "./deployment/dockerup/:/root/.moca-cmd:Z"
+    working_dir: "/root/.moca-cmd"
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+networks:
+  moca-network:
+    external: true

@@ -1,0 +1,3 @@
+evmRpcAddr = "https://devnet-rpc.mocachain.org"
+rpcAddr = "https://devnet-lcd.mocachain.org:443"
+chainId = "moca_5151-1"

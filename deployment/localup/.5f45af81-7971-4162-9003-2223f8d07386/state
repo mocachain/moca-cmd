@@ -1,0 +1,43 @@
+{
+    "Lock": {},
+    "object_state": {
+        "0": {
+            "bucket_name": "moca",
+            "object_name": "upload/",
+            "file_path": "./upload",
+            "upload_single_folder": true,
+            "object_size": 0,
+            "status": "sealed",
+            "comment": ""
+        },
+        "1": {
+            "bucket_name": "moca",
+            "object_name": "upload/hello.txt",
+            "file_path": "upload/hello.txt",
+            "upload_single_folder": false,
+            "object_size": 6,
+            "status": "sealed",
+            "comment": ""
+        },
+        "2": {
+            "bucket_name": "moca",
+            "object_name": "upload/world.txt",
+            "file_path": "upload/world.txt",
+            "upload_single_folder": false,
+            "object_size": 6,
+            "status": "sealed",
+            "comment": ""
+        }
+    },
+    "task_id": "5f45af81-7971-4162-9003-2223f8d07386",
+    "status": "successful",
+    "bucket_name": "moca",
+    "folder_name": "./upload",
+    "flag": {
+        "content_type": "application/octet-stream",
+        "secondary_sp": "",
+        "part_size": 33554432,
+        "tags": "",
+        "visibility": 3
+    }
+}

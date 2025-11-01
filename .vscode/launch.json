@@ -1,0 +1,395 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "policy put",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "policy",
+        "put",
+        "--groupId",
+        "2",
+        "--actions",
+        "get,delete",
+        "grn:o::moca/go.mod"
+      ]
+    },
+    {
+      "name": "transfer",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bank",
+        "transfer",
+        "--toAddress",
+        "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "--amount",
+        "10000000000"
+      ]
+    },
+    {
+      "name": "object fold create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "put",
+        "--recursive",
+        "--contentType",
+        "\"application/octet-stream\"",
+        "${workspaceFolder}/upload",
+        "moca://moca"
+      ]
+    },
+    {
+      "name": "group delete",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "rm",
+        "moca"
+      ]
+    },
+    {
+      "name": "group ls member",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "ls-member",
+        "moca"
+      ]
+    },
+    {
+      "name": "group add member",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "update",
+        "--addMembers",
+        "0x757F0F85A5184c4E0183525EbD8fEdcD53b7eF80,0x757F0F85A5184c4E0183525EbD8fEdcD53b7eF81",
+        "moca"
+      ]
+    },
+    {
+      "name": "group ls",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "ls"
+      ]
+    },
+    {
+      "name": "group create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "group",
+        "create",
+        "--tags",
+        "[{\"key\":\"key1\",\"value\":\"value1\"}]",
+        "moca"
+      ]
+    },
+    {
+      "name": "object delete",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "rm",
+        "moca://moca/go.mod"
+      ]
+    },
+    {
+      "name": "object get",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "get",
+        "moca://moca/go.mod"
+      ]
+    },
+    {
+      "name": "object head",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "head",
+        "moca://moca/go.mod"
+      ]
+    },
+    {
+      "name": "object update public",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "update",
+        "--visibility",
+        "public-read",
+        "moca://moca/go.mod"
+      ]
+    },
+    {
+      "name": "object update private",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "update",
+        "--visibility",
+        "private",
+        "moca://moca/go.mod"
+      ]
+    },
+    {
+      "name": "object set tag",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "setTag",
+        "--tags",
+        "[{\"key\":\"key1\",\"value\":\"value2\"}]",
+        "moca://moca/go.mod"
+      ]
+    },
+    {
+      "name": "object create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "object",
+        "put",
+        "--contentType",
+        "\"application/octet-stream\"",
+        "${workspaceFolder}/go.mod",
+        "moca://moca/go.mod"
+      ]
+    },
+    {
+      "name": "bucket migrate",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bucket",
+        "migrate",
+        "--dstPrimarySPID",
+        "2",
+        "moca://moca"
+      ]
+    },
+    {
+      "name": "bucket head",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bucket",
+        "head",
+        "moca://moca"
+      ]
+    },
+    {
+      "name": "bucket update",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bucket",
+        "update",
+        "--visibility",
+        "public-read",
+        "moca://moca"
+      ]
+    },
+    {
+      "name": "bucket ls",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bucket",
+        "ls"
+      ]
+    },
+    {
+      "name": "bucket create",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "bucket",
+        "create",
+        "moca://moca5"
+      ]
+    },
+    {
+      "name": "sp head",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "sp",
+        "head",
+        "http://127.0.0.1:9033"
+      ]
+    },
+    {
+      "name": "sp ls",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "--home",
+        "${workspaceFolder}/deployment/localup",
+        "--passwordfile",
+        "${workspaceFolder}/deployment/localup/testkey/password.txt",
+        "sp",
+        "ls"
+      ]
+    },
+    {
+      "name": "version",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",
+      "args": [
+        "version"
+      ]
+    }
+  ]
+}
