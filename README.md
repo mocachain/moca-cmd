@@ -16,7 +16,7 @@ moca is still undergoing rapid development iterations, and moca-cmd also needs t
 ### installation
 
 ```
-git clone https://github.com/MocaFoundation/moca-cmd.git
+git clone https://github.com/mocachain/moca-cmd.git
 cd moca-cmd
 make build
 cd build
@@ -371,10 +371,10 @@ moca-cmd object mirror --bucketName yourBucketName --objectName yourObjectName
 
 ## Reference
 
-- [moca](https://github.com/MocaFoundation/moca): the moca blockchain
-- [moca-Contract](https://github.com/MocaFoundation/moca-contracts): the cross chain contract for moca that deployed on BSC network. .
-- [moca-Storage-Provider](https://github.com/MocaFoundation/moca-storage-provider): the storage service infrastructures provided by either organizations or individuals.
-- [moca-Relayer](https://github.com/MocaFoundation/moca-relayer): the service that relay cross chain package to both chains.
+- [moca](https://github.com/mocachain/moca): the moca blockchain
+- [moca-Contract](https://github.com/mocachain/moca-contracts): the cross chain contract for moca that deployed on BSC network. .
+- [moca-Storage-Provider](https://github.com/mocachain/moca-storage-provider): the storage service infrastructures provided by either organizations or individuals.
+- [moca-Relayer](https://github.com/mocachain/moca-relayer): the service that relay cross chain package to both chains.
 
 ## Fork Information
 
