@@ -46,6 +46,12 @@ func main() {
 				Usage: "moca chainId",
 			},
 		),
+		altsrc.NewStringFlag(
+			&cli.StringFlag{
+				Name:  "evmRpcAddr",
+				Usage: "EVM RPC address for interacting with EVM module",
+			},
+		),
 
 		&cli.StringFlag{
 			Name:    passwordFileFlag,
