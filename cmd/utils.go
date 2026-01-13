@@ -498,7 +498,9 @@ func parseConfigFile(filePath string) (*cmdConfig, error) {
 	return &config, nil
 }
 
-const configContent = "rpcAddr = \"https://moca-chain.org:443\"\nchainId = \"moca_5151-1\""
+const configContent = `rpcAddr = "https://moca-chain.org:443"
+chainId = "moca_5151-1"
+evmRpcAddr = "https://moca-chain.org:8545"`
 
 // loadConfig parse the default config file path
 func loadConfig(ctx *cli.Context) (*cmdConfig, error) {

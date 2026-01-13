@@ -108,18 +108,19 @@ func cmdMigrateBucket() *cli.Command {
 		Name:      "migrate",
 		Action:    migrateBucket,
 		Usage:     "migrate bucket to dstPrimarySP",
-		ArgsUsage: "dstPrimarySPID BUCKET-URL",
+		ArgsUsage: "BUCKET-URL",
 		Description: `
 Get approval of migrating from SP, send the signed migrate bucket msg to moca and return the txn hash.
 
 Examples:
-migrate the bucket to dest PrimarySP
-$ moca-cmd bucket migrate dstPrimarySPID moca://moca-bucket`,
+# migrate the bucket to dest PrimarySP with ID 3
+$ moca-cmd bucket migrate --dstPrimarySPID 3 moca://moca-bucket`,
 		Flags: []cli.Flag{
 			&cli.UintFlag{
-				Name:  dstPrimarySPIDFlag,
-				Value: 1,
-				Usage: "indicate the dest primarySP ID",
+				Name:     dstPrimarySPIDFlag,
+				Value:    1,
+				Usage:    "indicate the dest primarySP ID",
+				Required: true,
 			},
 		},
 	}
