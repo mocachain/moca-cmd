@@ -144,6 +144,6 @@ func getTaskState(ctx *cli.Context) (*TaskState, error) {
 }
 
 func fileExists(path string) bool {
-	_, err := os.Stat(path)
+	_, err := os.Stat(path) // os.Stat获取文件信息
 	return !os.IsNotExist(err)
 }

@@ -1,22 +1,25 @@
 FROM golang:1.23.6-bookworm AS builder
 
 ARG GITHUB_TOKEN
-RUN if [ -n "${GITHUB_TOKEN}" ]; then \
-        git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/"; \
-    fi
+RUN git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/"
 
 ENV CGO_CFLAGS="-O -D__BLST_PORTABLE__"
 ENV CGO_CFLAGS_ALLOW="-O -D__BLST_PORTABLE__"
-ENV GOPRIVATE="github.com/mocachain/*,github.com/evmos/*"
-ENV GONOPROXY="github.com/mocachain/*,github.com/evmos/*"
-ENV GONOSUMDB="github.com/mocachain/*,github.com/evmos/*"
-ENV GOSUMDB=off
+ENV GOPRIVATE=github.com/MocaFoundation
+ENV GOPROXY=https://proxy.golang.org,direct
+ENV GONOSUMDB=github.com/MocaFoundation/*
+ENV GONOSUMCHECK=github.com/MocaFoundation/*
 
 WORKDIR /workspace
+
 COPY go.mod go.sum ./
-RUN rm -f go.sum && go mod download && go mod tidy
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download
+
 COPY . .
-RUN rm -f go.sum && go mod download && go mod tidy && make build
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    make build
 
 
 FROM golang:1.23.6-bookworm

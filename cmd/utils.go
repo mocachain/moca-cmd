@@ -30,8 +30,8 @@ import (
 	permTypes "github.com/evmos/evmos/v12/x/permission/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
 	vgTypes "github.com/evmos/evmos/v12/x/virtualgroup/types"
-	sdkutils "github.com/mocachain/moca-go-sdk/pkg/utils"
-	sdktypes "github.com/mocachain/moca-go-sdk/types"
+	sdkutils "github.com/MocaFoundation/moca-go-sdk/pkg/utils"
+	sdktypes "github.com/MocaFoundation/moca-go-sdk/types"
 )
 
 const (

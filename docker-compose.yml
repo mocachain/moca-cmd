@@ -1,7 +1,12 @@
 services:
   cmd:
     container_name: moca-cmd
-    image: "mocachain/moca-cmd"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
+    image: "zkmelabs/moca-cmd:local"
     networks:
       - moca-network
     volumes:

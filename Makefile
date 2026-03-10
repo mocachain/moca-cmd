@@ -1,5 +1,14 @@
 SHELL := /bin/bash
 
+# Load .env file if it exists
+-include .env
+export
+
+# Configure git to use HTTPS+Token for private repositories if GITHUB_TOKEN is set
+ifdef GITHUB_TOKEN
+  $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
+endif
+
 .PHONY: all build
 
 build:
@@ -22,12 +31,18 @@ lint-fix:
 ###                        Docker                                           ###
 ###############################################################################
 DOCKER := $(shell which docker)
-DOCKER_IMAGE := mocachain/moca-cmd
+DOCKER_IMAGE := zkmelabs/moca-cmd
 COMMIT_HASH := $(shell git rev-parse --short=7 HEAD)
 DOCKER_TAG := $(COMMIT_HASH)
 
 build-docker:
-	$(DOCKER) build --progress=plain  -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+	@if [ -n "$(GITHUB_TOKEN)" ]; then \
+		echo "Building with GITHUB_TOKEN for private repositories..."; \
+		$(DOCKER) build --progress=plain --build-arg GITHUB_TOKEN=$(GITHUB_TOKEN) -t ${DOCKER_IMAGE}:${DOCKER_TAG} .; \
+	else \
+		echo "Building without GITHUB_TOKEN (public repositories only)..."; \
+		$(DOCKER) build --progress=plain -t ${DOCKER_IMAGE}:${DOCKER_TAG} .; \
+	fi
 	$(DOCKER) tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
 	$(DOCKER) tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:${COMMIT_HASH}
 
@@ -38,7 +53,6 @@ build-docker:
 ###############################################################################
 start-dc:
 	docker compose up -d && docker attach moca-cmd
-	
 stop-dc:
 	docker compose down --volumes
 
@@ -51,7 +65,7 @@ stop-dc:
 
 PACKAGE_NAME:=github.com/evmos/evmos
 GOLANG_CROSS_VERSION  = v1.22
-GOPATH ?= '$(HOME)/go'
+GOPATH ?= $(HOME)/go
 release-dry-run:
 	docker run \
 		--rm \

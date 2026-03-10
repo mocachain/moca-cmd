@@ -14,7 +14,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/evmos/evmos/v12/sdk/types"
 	"github.com/urfave/cli/v2"
-	sdktypes "github.com/mocachain/moca-go-sdk/types"
+	sdktypes "github.com/MocaFoundation/moca-go-sdk/types"
 )
 
 // cmdImportAccount import the account by private key file
@@ -493,6 +493,8 @@ func Transfer(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 	fmt.Printf("transfer %s amoca to address %s succ, txHash: %s\n", amountStr, toAddr, txHash)
+	fmt.Printf("\nNote: This is an EVM transaction hash. To query with mocad, you need the Cosmos tx hash.\n")
+	fmt.Printf("The transaction will be included in the next block. You can find it by searching recent blocks.\n")
 	return nil
 }
 

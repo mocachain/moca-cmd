@@ -16,7 +16,7 @@ import (
 	"github.com/evmos/evmos/v12/sdk/types"
 	mocadTypes "github.com/evmos/evmos/v12/types"
 	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
-	sdktypes "github.com/mocachain/moca-go-sdk/types"
+	sdktypes "github.com/MocaFoundation/moca-go-sdk/types"
 )
 
 // cmdCreateBucket create a new Bucket
@@ -641,10 +641,19 @@ func printListGroupResult(listResult *sdktypes.GroupsResult) {
 		if group.Removed {
 			continue
 		}
+		// Check if Group info is nil to avoid nil pointer dereference
+		if group.Group == nil {
+			continue
+		}
 		location, _ := time.LoadLocation("Asia/Shanghai")
 		t := time.Unix(group.CreateTime, 0).In(location)
 
-		fmt.Printf(format, t.Format(iso8601DateFormat), group.Group.GroupName, strconv.FormatUint(group.Group.Id.Uint64(), 10))
+		// Get the group ID using the safe helper method
+		groupID := group.GetGroupID()
+		if groupID == "" {
+			groupID = "0"
+		}
+		fmt.Printf(format, t.Format(iso8601DateFormat), group.Group.GroupName, groupID)
 	}
 }
 
