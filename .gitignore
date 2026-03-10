@@ -28,6 +28,6 @@ deployment/dockerup/new_random_file
 deployment/dockerup/random_file
 random_file
 dist
-deployment/testnet/
 upload/hello.txt
 upload/world.txt
+.env

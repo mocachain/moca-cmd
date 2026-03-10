@@ -195,6 +195,56 @@ $ moca-cmd payment-account ls `,
 	}
 }
 
+// cmdGetStreamRecord query the stream record of a payment account
+func cmdGetStreamRecord() *cli.Command {
+	return &cli.Command{
+		Name:      "stream-record",
+		Action:    getStreamRecord,
+		Usage:     "query stream record (balance) of a payment account",
+		ArgsUsage: "[payment-account-address]",
+		Description: `
+Query the stream record of a payment account, which contains balance information.
+
+Examples:
+$ moca-cmd payment-account stream-record 0x...`,
+	}
+}
+
+func getStreamRecord(ctx *cli.Context) error {
+	if ctx.NArg() < 1 {
+		return toCmdErr(fmt.Errorf("payment account address is required"))
+	}
+
+	paymentAddress := ctx.Args().Get(0)
+
+	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: true})
+	if err != nil {
+		return toCmdErr(err)
+	}
+
+	c, cancel := context.WithCancel(globalContext)
+	defer cancel()
+
+	streamRecord, err := client.GetStreamRecord(c, paymentAddress)
+	if err != nil {
+		return toCmdErr(err)
+	}
+
+	fmt.Printf("Stream Record for %s:\n", paymentAddress)
+	fmt.Printf("  Account: %s\n", streamRecord.Account)
+	fmt.Printf("  Static Balance: %s wei\n", streamRecord.StaticBalance.String())
+	fmt.Printf("  Buffer Balance: %s wei\n", streamRecord.BufferBalance.String())
+	fmt.Printf("  Lock Balance: %s wei\n", streamRecord.LockBalance.String())
+	fmt.Printf("  Netflow Rate: %s wei/sec\n", streamRecord.NetflowRate.String())
+	fmt.Printf("  Frozen Netflow Rate: %s wei/sec\n", streamRecord.FrozenNetflowRate.String())
+	fmt.Printf("  Status: %s\n", streamRecord.Status.String())
+	fmt.Printf("  CRUD Timestamp: %d\n", streamRecord.CrudTimestamp)
+	fmt.Printf("  Settle Timestamp: %d\n", streamRecord.SettleTimestamp)
+	fmt.Printf("  Out Flow Count: %d\n", streamRecord.OutFlowCount)
+
+	return nil
+}
+
 func listPaymentAccounts(ctx *cli.Context) error {
 	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: true})
 	if err != nil {

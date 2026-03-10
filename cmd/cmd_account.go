@@ -493,6 +493,8 @@ func Transfer(ctx *cli.Context) error {
 		return toCmdErr(err)
 	}
 	fmt.Printf("transfer %s amoca to address %s succ, txHash: %s\n", amountStr, toAddr, txHash)
+	fmt.Printf("\nNote: This is an EVM transaction hash. To query with mocad, you need the Cosmos tx hash.\n")
+	fmt.Printf("The transaction will be included in the next block. You can find it by searching recent blocks.\n")
 	return nil
 }
 

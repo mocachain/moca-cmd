@@ -309,6 +309,8 @@ func createBucket(ctx *cli.Context) error {
 
 	fmt.Printf("make_bucket: %s \n", bucketName)
 	fmt.Println("transaction hash: ", txnHash)
+	fmt.Printf("\nNote: This is an EVM transaction hash. To query with mocad, you need the Cosmos tx hash.\n")
+	fmt.Printf("The transaction will be included in the next block. You can find it by searching recent blocks.\n")
 	return nil
 }
 

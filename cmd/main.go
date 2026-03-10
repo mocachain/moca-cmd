@@ -158,6 +158,7 @@ func main() {
 					cmdPaymentDeposit(),
 					cmdPaymentWithdraw(),
 					cmdListPaymentAccounts(),
+					cmdGetStreamRecord(),
 				},
 			},
 			{
@@ -180,6 +181,7 @@ func main() {
 					cmdSetDefaultAccount(),
 				},
 			},
+			cmdTx(),
 			{
 				Name:  "fee",
 				Usage: "support fee grant operation functions",
