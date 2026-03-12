@@ -30,7 +30,7 @@ When running commands that interact with the moca, if there is no config/config.
 the tool will generate the config/config.toml file automatically which is consistent with the testnet configuration under the path.
 
 Below is an example of the config file. The rpcAddr and chainId should be consistent with the moca network.
-For moca Mainnet, you can refer to [moca Mainnet RPC Endpoints](https://docs.moca.network/).
+For moca Mainnet, you can refer to [moca Mainnet RPC Endpoints](https://todo).
 The rpcAddr indicates the Tendermint RPC address with the port info.
 
 ```env
