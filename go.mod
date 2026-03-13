@@ -242,7 +242,7 @@ replace (
 	github.com/evmos/evmos/v12 => github.com/mocachain/moca/v12 v12.2.0-rc1
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/mocachain/moca-common/go => github.com/mocachain/moca-common/go v1.2.0-rc1
-	github.com/mocachain/moca-go-sdk => github.com/mocachain/moca-go-sdk v1.2.0-rc0.0.20260313091522-fe01c4e8e23c
+	github.com/mocachain/moca-go-sdk => github.com/mocachain/moca-go-sdk v1.2.0-rc1
 	github.com/mocachain/moca-juno/v4 => github.com/mocachain/moca-juno/v4 v4.1.1-0.20260311142744-a8aa6971a0ca
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
