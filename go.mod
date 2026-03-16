@@ -219,30 +219,30 @@ require (
 
 replace (
 	// Use mocachain moca-cosmos-sdk for cosmos-sdk v0.50 compatibility
-	cosmossdk.io/api => github.com/mocachain/moca-cosmos-sdk/api v0.0.0-20260311142350-111a846828cc
-	cosmossdk.io/client/v2 => github.com/mocachain/moca-cosmos-sdk/client/v2 v2.0.0-20260311142350-111a846828cc
-	cosmossdk.io/simapp => github.com/mocachain/moca-cosmos-sdk/simapp v0.0.0-20260311142350-111a846828cc
-	cosmossdk.io/store => github.com/mocachain/moca-cosmos-sdk/store v0.0.0-20260311142350-111a846828cc
-	cosmossdk.io/x/evidence => github.com/mocachain/moca-cosmos-sdk/x/evidence v0.0.0-20260311142350-111a846828cc
-	cosmossdk.io/x/feegrant => github.com/mocachain/moca-cosmos-sdk/x/feegrant v0.0.0-20260311142350-111a846828cc
-	cosmossdk.io/x/nft => github.com/mocachain/moca-cosmos-sdk/x/nft v0.0.0-20260311142350-111a846828cc
-	cosmossdk.io/x/tx => github.com/mocachain/moca-cosmos-sdk/x/tx v0.0.0-20260311142350-111a846828cc
-	cosmossdk.io/x/upgrade => github.com/mocachain/moca-cosmos-sdk/x/upgrade v0.0.0-20260311142350-111a846828cc
-	github.com/0xPolygon/polygon-edge => github.com/mocachain/polygon-edge v1.3.3-moca.1
+	cosmossdk.io/api => ../moca-cosmos-sdk/api
+	cosmossdk.io/client/v2 => ../moca-cosmos-sdk/client/v2
+	cosmossdk.io/simapp => ../moca-cosmos-sdk/simapp
+	cosmossdk.io/store => ../moca-cosmos-sdk/store
+	cosmossdk.io/x/evidence => ../moca-cosmos-sdk/x/evidence
+	cosmossdk.io/x/feegrant => ../moca-cosmos-sdk/x/feegrant
+	cosmossdk.io/x/nft => ../moca-cosmos-sdk/x/nft
+	cosmossdk.io/x/tx => ../moca-cosmos-sdk/x/tx
+	cosmossdk.io/x/upgrade => ../moca-cosmos-sdk/x/upgrade
+	github.com/0xPolygon/polygon-edge => ../polygon-edge
 	github.com/btcsuite/btcd => github.com/btcsuite/btcd v0.22.1
 	github.com/btcsuite/btcd/btcec/v2 => github.com/btcsuite/btcd/btcec/v2 v2.3.4
-	github.com/cometbft/cometbft => github.com/mocachain/moca-cometbft v1.1.1-0.20260310132047-7d6dca6a98c4
-	github.com/cometbft/cometbft-db => github.com/mocachain/moca-cometbft-db v1.1.0
+	github.com/cometbft/cometbft => ../moca-cometbft
+	github.com/cometbft/cometbft-db => ../moca-cometbft-db
 	github.com/confio/ics23/go => github.com/cosmos/cosmos-sdk/ics23/go v0.8.0
 	github.com/consensys/gnark-crypto => github.com/consensys/gnark-crypto v0.7.0
-	github.com/cosmos/cosmos-sdk => github.com/mocachain/moca-cosmos-sdk v1.1.1-0.20260311142350-111a846828cc
-	github.com/cosmos/iavl => github.com/mocachain/moca-iavl v1.1.1-0.20260310045324-fcbc580b8ebb
-	github.com/cosmos/ibc-go/v10 => github.com/mocachain/moca-ibc-go/v10 v10.1.1-0.20260311142638-18cd54b7cbcf
-	github.com/ethereum/go-ethereum => github.com/mocachain/go-ethereum v1.10.27-moca.2
-	github.com/evmos/evmos/v12 => github.com/mocachain/moca/v12 v12.2.0-rc1
+	github.com/cosmos/cosmos-sdk => ../moca-cosmos-sdk
+	github.com/cosmos/iavl => ../moca-iavl
+	github.com/cosmos/ibc-go/v10 => ../moca-ibc-go
+	github.com/ethereum/go-ethereum => ../go-ethereum
+	github.com/evmos/evmos/v12 => ../moca
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-	github.com/mocachain/moca-common/go => github.com/mocachain/moca-common/go v1.2.0-rc1
-	github.com/mocachain/moca-go-sdk => github.com/mocachain/moca-go-sdk v1.2.0-rc1
-	github.com/mocachain/moca-juno/v4 => github.com/mocachain/moca-juno/v4 v4.1.1-0.20260311142744-a8aa6971a0ca
+	github.com/mocachain/moca-common/go => ../moca-common/go
+	github.com/mocachain/moca-go-sdk => ../moca-go-sdk
+	github.com/mocachain/moca-juno/v4 => ../moca-juno
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
