@@ -235,14 +235,14 @@ replace (
 	github.com/cometbft/cometbft-db => github.com/mocachain/moca-cometbft-db v1.1.0-rc1-22256c4
 	github.com/confio/ics23/go => github.com/cosmos/cosmos-sdk/ics23/go v0.8.0
 	github.com/consensys/gnark-crypto => github.com/consensys/gnark-crypto v0.7.0
-	github.com/cosmos/cosmos-sdk => github.com/mocachain/moca-cosmos-sdk v1.2.0-rc1-66c0054
-	github.com/cosmos/iavl => github.com/mocachain/moca-iavl v1.2.0-rc1-82a95b2
-	github.com/cosmos/ibc-go/v10 => github.com/mocachain/moca-ibc-go/v10 v10.2.0-rc1-5d902f9
-	github.com/ethereum/go-ethereum => github.com/mocachain/go-ethereum v1.10.27-rc1-7c25950
+	github.com/cosmos/cosmos-sdk => github.com/mocachain/moca-cosmos-sdk v1.2.0-rc2-66c0054
+	github.com/cosmos/iavl => github.com/mocachain/moca-iavl v1.2.0-rc1-7d754d4
+	github.com/cosmos/ibc-go/v10 => github.com/mocachain/moca-ibc-go/v10 v10.2.0-rc2-c490b6f
+	github.com/ethereum/go-ethereum => github.com/mocachain/go-ethereum v1.10.27-rc1-e849a5b
 	github.com/evmos/evmos/v12 => github.com/mocachain/moca/v12 v12.2.0-rc1-ca730f1
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-	github.com/mocachain/moca-common/go => github.com/mocachain/moca-common/go v1.2.0-rc3-9d2d793
-	github.com/mocachain/moca-go-sdk => github.com/mocachain/moca-go-sdk v1.2.0-rc3-ec82d72
-	github.com/mocachain/moca-juno/v4 => github.com/mocachain/moca-juno/v4 v4.1.0-rc1-b77da27
+	github.com/mocachain/moca-common/go => github.com/mocachain/moca-common/go v1.2.0-rc2-c4db207
+	github.com/mocachain/moca-go-sdk => github.com/mocachain/moca-go-sdk v1.2.0-rc2-95a3b84
+	github.com/mocachain/moca-juno/v4 => github.com/mocachain/moca-juno/v4 v4.2.0-rc1-98cd4b0
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
