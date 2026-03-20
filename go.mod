@@ -219,30 +219,30 @@ require (
 
 replace (
 	// Use mocachain moca-cosmos-sdk for cosmos-sdk v0.50 compatibility
-	cosmossdk.io/api => github.com/mocachain/moca-cosmos-sdk/api v1.2.0-rc1-b329d8b
-	cosmossdk.io/client/v2 => github.com/mocachain/moca-cosmos-sdk/client/v2 v2.1.0-rc1-b329d8b
-	cosmossdk.io/simapp => github.com/mocachain/moca-cosmos-sdk/simapp v1.2.0-rc1-b329d8b
-	cosmossdk.io/store => github.com/mocachain/moca-cosmos-sdk/store v1.2.0-rc1-b329d8b
-	cosmossdk.io/x/evidence => github.com/mocachain/moca-cosmos-sdk/x/evidence v1.2.0-rc1-b329d8b
-	cosmossdk.io/x/feegrant => github.com/mocachain/moca-cosmos-sdk/x/feegrant v1.2.0-rc1-b329d8b
-	cosmossdk.io/x/nft => github.com/mocachain/moca-cosmos-sdk/x/nft v1.2.0-rc1-b329d8b
-	cosmossdk.io/x/tx => github.com/mocachain/moca-cosmos-sdk/x/tx v1.2.0-rc1-b329d8b
-	cosmossdk.io/x/upgrade => github.com/mocachain/moca-cosmos-sdk/x/upgrade v1.2.0-rc1-b329d8b
+	cosmossdk.io/api => github.com/mocachain/moca-cosmos-sdk/api v1.2.0-rc0.0.20260320020435-a29d423d1f97
+	cosmossdk.io/client/v2 => github.com/mocachain/moca-cosmos-sdk/client/v2 v2.0.0-20260320020435-a29d423d1f97
+	cosmossdk.io/simapp => github.com/mocachain/moca-cosmos-sdk/simapp v1.2.0-rc0.0.20260320020435-a29d423d1f97
+	cosmossdk.io/store => github.com/mocachain/moca-cosmos-sdk/store v1.2.0-rc0.0.20260320020435-a29d423d1f97
+	cosmossdk.io/x/evidence => github.com/mocachain/moca-cosmos-sdk/x/evidence v1.1.1-0.20260320020435-a29d423d1f97
+	cosmossdk.io/x/feegrant => github.com/mocachain/moca-cosmos-sdk/x/feegrant v1.1.1-0.20260320020435-a29d423d1f97
+	cosmossdk.io/x/nft => github.com/mocachain/moca-cosmos-sdk/x/nft v1.2.0-rc0.0.20260320020435-a29d423d1f97
+	cosmossdk.io/x/tx => github.com/mocachain/moca-cosmos-sdk/x/tx v1.2.0-rc0.0.20260320020435-a29d423d1f97
+	cosmossdk.io/x/upgrade => github.com/mocachain/moca-cosmos-sdk/x/upgrade v1.1.1-0.20260320020435-a29d423d1f97
 	github.com/0xPolygon/polygon-edge => github.com/mocachain/polygon-edge v1.3.3-moca.1
 	github.com/btcsuite/btcd => github.com/btcsuite/btcd v0.22.1
 	github.com/btcsuite/btcd/btcec/v2 => github.com/btcsuite/btcd/btcec/v2 v2.3.4
-	github.com/cometbft/cometbft => github.com/mocachain/moca-cometbft v1.2.0-rc2-279e646
+	github.com/cometbft/cometbft => github.com/mocachain/moca-cometbft v1.2.0-rc0.0.20260319090650-6c202b1a2ec8
 	github.com/cometbft/cometbft-db => github.com/mocachain/moca-cometbft-db v1.1.0-rc1-22256c4
 	github.com/confio/ics23/go => github.com/cosmos/cosmos-sdk/ics23/go v0.8.0
 	github.com/consensys/gnark-crypto => github.com/consensys/gnark-crypto v0.7.0
-	github.com/cosmos/cosmos-sdk => github.com/mocachain/moca-cosmos-sdk v1.2.0-rc17-b329d8b
-	github.com/cosmos/iavl => github.com/mocachain/moca-iavl v1.2.0-rc1-7d754d4
-	github.com/cosmos/ibc-go/v10 => github.com/mocachain/moca-ibc-go/v10 v10.2.0-rc1-6647ca4
+	github.com/cosmos/cosmos-sdk => github.com/mocachain/moca-cosmos-sdk v1.2.0-rc0.0.20260320020435-a29d423d1f97
+	github.com/cosmos/iavl => github.com/mocachain/moca-iavl v1.2.0-rc0.0.20260318093905-7d754d41e8e9
+	github.com/cosmos/ibc-go/v10 => github.com/mocachain/moca-ibc-go/v10 v10.2.0-rc0.0.20260320021434-9f70a0d36b73
 	github.com/ethereum/go-ethereum => github.com/mocachain/go-ethereum v1.10.27-rc1-e849a5b
 	github.com/evmos/evmos/v12 => github.com/mocachain/moca/v12 v12.2.0-rc2-22be1bc
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-	github.com/mocachain/moca-common/go => github.com/mocachain/moca-common/go v1.2.0-rc1-53f4ff0
-	github.com/mocachain/moca-go-sdk => github.com/mocachain/moca-go-sdk v1.2.0-rc1-0dac2d2
-	github.com/mocachain/moca-juno/v4 => github.com/mocachain/moca-juno/v4 v4.2.0-rc2-0ec8991
+	github.com/mocachain/moca-common/go => github.com/mocachain/moca-common/go v1.2.0-rc1-53f4ff0.0.20260320021758-6f5b8d849977
+	github.com/mocachain/moca-go-sdk => github.com/mocachain/moca-go-sdk v1.2.0-rc1-0dac2d2.0.20260320022354-59c4d79c15d1
+	github.com/mocachain/moca-juno/v4 => github.com/mocachain/moca-juno/v4 v4.2.0-rc2-0ec8991.0.20260320022107-ca7fc9d5603c
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
