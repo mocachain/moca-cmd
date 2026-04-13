@@ -14,29 +14,45 @@ ifdef GITHUB_TOKEN
   $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
 endif
 
-.PHONY: all build
+.PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks
 
 build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
 
 golangci_version=v1.64.8
-LINT_SCRIPT=./scripts/lint.sh
+LEFTHOOK_VERSION=v1.11.3
+INCREMENTAL_LINT_SCRIPT=./scripts/run-incremental-lint.sh
+GO_GOBIN := $(shell $(GO) env GOBIN)
+GO_GOPATH := $(shell $(GO) env GOPATH)
 
-lint:
-	@echo "--> Running linter"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) incremental
+ifeq ($(GO_GOBIN),)
+golangci_lint_cmd=$(GO_GOPATH)/bin/golangci-lint
+lefthook_cmd=$(GO_GOPATH)/bin/lefthook
+else
+golangci_lint_cmd=$(GO_GOBIN)/golangci-lint
+lefthook_cmd=$(GO_GOBIN)/lefthook
+endif
 
-lint-fix:
-	@echo "--> Running linter"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) incremental fix
+install-deps:
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(GO) install github.com/evilmartians/lefthook@$(LEFTHOOK_VERSION)
+	@$(lefthook_cmd) install
 
-lint-all:
+lint: install-deps
+	@echo "--> Running incremental linter"
+	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m
+
+lint-fix: install-deps
+	@echo "--> Running incremental linter with fixes"
+	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m --fix --out-format=tab --issues-exit-code=0
+
+lint-all: install-deps
 	@echo "--> Running full linter"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) full
+	@$(golangci_lint_cmd) run --timeout=15m ./...
 
-lint-fix-all:
+lint-fix-all: install-deps
 	@echo "--> Running full linter with fixes"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) full fix
+	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
 
 ###############################################################################
 ###                        Docker                                           ###
