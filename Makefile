@@ -4,6 +4,11 @@ SHELL := /bin/bash
 -include .env
 export
 
+# Keep local Go commands on the repository toolchain even when a newer
+# system-wide Go release is installed.
+GO_TOOLCHAIN ?= go1.23.12
+GO := env GOTOOLCHAIN=$(GO_TOOLCHAIN) go
+
 # Configure git to use HTTPS+Token for private repositories if GITHUB_TOKEN is set
 ifdef GITHUB_TOKEN
   $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
@@ -12,19 +17,19 @@ endif
 .PHONY: all build
 
 build:
-	go build -o ./build/moca-cmd cmd/*.go
+	$(GO) build -o ./build/moca-cmd cmd/*.go
 
 golangci_lint_cmd=golangci-lint
 golangci_version=v1.51.2
 
 lint:
 	@echo "--> Running linter"
-	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
 	@$(golangci_lint_cmd) run --timeout=10m
 
 lint-fix:
 	@echo "--> Running linter"
-	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
 	@$(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
 
 ###############################################################################
