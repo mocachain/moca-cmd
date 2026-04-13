@@ -21,6 +21,7 @@ build:
 
 golangci_version=v1.64.8
 LEFTHOOK_VERSION=v1.11.3
+INCREMENTAL_LINT_SCRIPT=./scripts/run-incremental-lint.sh
 GO_GOBIN := $(shell $(GO) env GOBIN)
 GO_GOPATH := $(shell $(GO) env GOPATH)
 
@@ -32,39 +33,15 @@ golangci_lint_cmd=$(GO_GOBIN)/golangci-lint
 lefthook_cmd=$(GO_GOBIN)/lefthook
 endif
 
-define lint_changed_dirs
-changed_dirs=""; \
-while IFS= read -r changed_file; do \
-	dir="$$(dirname "$$changed_file")"; \
-	if [ "$$dir" = "." ]; then \
-		target="."; \
-	else \
-		target="./$$dir"; \
-	fi; \
-	case " $$changed_dirs " in \
-		*" $$target "*) ;; \
-		*) changed_dirs="$$changed_dirs $$target" ;; \
-	esac; \
-	done < <((git diff --name-only --diff-filter=ACMR HEAD -- '*.go'; git ls-files --others --exclude-standard -- '*.go') | awk 'NF'); \
-if [ -z "$${changed_dirs## }" ]; then \
-	echo "No changed Go files detected; skipping incremental golangci-lint."; \
-	exit 0; \
-fi; \
-for target in $$changed_dirs; do \
-	echo "--> Linting $$target"; \
-	$(golangci_lint_cmd) run $(1) --timeout=10m "$$target" || exit $$?; \
-done
-endef
-
 lint:
 	@echo "--> Running incremental linter"
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@bash -lc '$(call lint_changed_dirs,)'
+	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m
 
 lint-fix:
 	@echo "--> Running incremental linter with fixes"
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@bash -lc '$(call lint_changed_dirs,--fix --out-format=tab --issues-exit-code=0)'
+	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m --fix --out-format=tab --issues-exit-code=0
 
 lint-all:
 	@echo "--> Running full linter"
