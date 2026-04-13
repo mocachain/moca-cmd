@@ -54,8 +54,6 @@ lint-fix-all: install-deps
 	@echo "--> Running full linter with fixes"
 	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
 
-hooks: install-deps
-
 ###############################################################################
 ###                        Docker                                           ###
 ###############################################################################
