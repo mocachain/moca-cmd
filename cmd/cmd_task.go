@@ -77,7 +77,7 @@ func getTaskStatus(ctx *cli.Context) error {
 	fmt.Printf("Folder: %s\n", content.FolderName)
 	fmt.Printf("Status: %s\n", content.Status)
 	for _, state := range content.ObjectState {
-		fmt.Printf("%s\n", fmt.Sprintf("%s %s %s", state.Status, state.ObjectName, state.Comment))
+		fmt.Printf("%s %s %s\n", state.Status, state.ObjectName, state.Comment)
 	}
 	fmt.Println()
 	return nil

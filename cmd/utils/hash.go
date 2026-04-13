@@ -30,7 +30,7 @@ func FormatTxHashOutput(evmHash string, cosmosHash string) string {
 	output.WriteString(fmt.Sprintf("transaction hash: %s\n", evmHash))
 	if cosmosHash != "" && cosmosHash != evmHash {
 		output.WriteString(fmt.Sprintf("cosmos tx hash (for mocad query): %s\n", cosmosHash))
-		output.WriteString(fmt.Sprintf("\nTo query this transaction:\n"))
+		output.WriteString("\nTo query this transaction:\n")
 		output.WriteString(fmt.Sprintf("  mocad query tx %s\n", cosmosHash))
 	}
 	return output.String()
