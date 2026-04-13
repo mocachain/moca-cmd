@@ -19,26 +19,24 @@ endif
 build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
 
-GO_GOBIN := $(shell $(GO) env GOBIN)
-GO_GOPATH := $(shell $(GO) env GOPATH)
-
-ifeq ($(GO_GOBIN),)
-golangci_lint_cmd=$(GO_GOPATH)/bin/golangci-lint
-else
-golangci_lint_cmd=$(GO_GOBIN)/golangci-lint
-endif
-
-golangci_version=v1.58.1
+golangci_version=v1.64.8
+LINT_SCRIPT=./scripts/lint.sh
 
 lint:
 	@echo "--> Running linter"
-	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(golangci_lint_cmd) run --timeout=10m
+	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) incremental
 
 lint-fix:
 	@echo "--> Running linter"
-	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(golangci_lint_cmd) run --fix --timeout=10m --out-format=tab --issues-exit-code=0
+	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) incremental fix
+
+lint-all:
+	@echo "--> Running full linter"
+	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) full
+
+lint-fix-all:
+	@echo "--> Running full linter with fixes"
+	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) full fix
 
 ###############################################################################
 ###                        Docker                                           ###

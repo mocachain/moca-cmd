@@ -8,6 +8,16 @@ on:
     branches:
       - main
       - develop
+  workflow_dispatch:
+    inputs:
+      lint_scope:
+        description: Lint scope to run
+        required: true
+        default: full
+        type: choice
+        options:
+          - incremental
+          - full
 permissions:
   contents: read
   # Optional: allow read access to pull request. Use with `only-new-issues` option.
@@ -28,6 +38,8 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup GitHub Token
         run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
       - uses: actions/cache@v4
@@ -49,9 +61,12 @@ jobs:
           go mod tidy
           go mod download
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
-          version: v1.58.1
-          skip-pkg-cache: true
-          args: --timeout=15m
+        run: ./scripts/lint.sh incremental
+        env:
+          GOLANGCI_LINT_VERSION: v1.64.8
+        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
+      - name: golangci-lint full
+        run: ./scripts/lint.sh full
+        env:
+          GOLANGCI_LINT_VERSION: v1.64.8
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.lint_scope == 'full' }}
