@@ -60,13 +60,27 @@ jobs:
       - run: |
           go mod tidy
           go mod download
+      - name: Determine incremental lint base
+        id: lint-base
+        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
+        run: |
+          if [ -n "${{ github.base_ref }}" ]; then
+            base_ref="origin/${{ github.base_ref }}"
+          else
+            base_ref="origin/main"
+          fi
+          echo "base_ref=$(git merge-base HEAD \"$base_ref\")" >> "$GITHUB_OUTPUT"
       - name: golangci-lint
-        run: ./scripts/lint.sh incremental
-        env:
-          GOLANGCI_LINT_VERSION: v1.64.8
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.64.8
+          skip-pkg-cache: true
+          args: --timeout=10m --new-from-rev=${{ steps.lint-base.outputs.base_ref }} --whole-files
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
       - name: golangci-lint full
-        run: ./scripts/lint.sh full
-        env:
-          GOLANGCI_LINT_VERSION: v1.64.8
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.64.8
+          skip-pkg-cache: true
+          args: --timeout=15m
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.lint_scope == 'full' }}

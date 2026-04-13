@@ -20,23 +20,65 @@ build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
 
 golangci_version=v1.64.8
-LINT_SCRIPT=./scripts/lint.sh
+LEFTHOOK_VERSION=v1.11.3
+GO_GOBIN := $(shell $(GO) env GOBIN)
+GO_GOPATH := $(shell $(GO) env GOPATH)
+
+ifeq ($(GO_GOBIN),)
+golangci_lint_cmd=$(GO_GOPATH)/bin/golangci-lint
+lefthook_cmd=$(GO_GOPATH)/bin/lefthook
+else
+golangci_lint_cmd=$(GO_GOBIN)/golangci-lint
+lefthook_cmd=$(GO_GOBIN)/lefthook
+endif
+
+define lint_changed_dirs
+changed_dirs=""; \
+while IFS= read -r changed_file; do \
+	dir="$$(dirname "$$changed_file")"; \
+	if [ "$$dir" = "." ]; then \
+		target="."; \
+	else \
+		target="./$$dir"; \
+	fi; \
+	case " $$changed_dirs " in \
+		*" $$target "*) ;; \
+		*) changed_dirs="$$changed_dirs $$target" ;; \
+	esac; \
+	done < <((git diff --name-only --diff-filter=ACMR HEAD -- '*.go'; git ls-files --others --exclude-standard -- '*.go') | awk 'NF'); \
+if [ -z "$${changed_dirs## }" ]; then \
+	echo "No changed Go files detected; skipping incremental golangci-lint."; \
+	exit 0; \
+fi; \
+for target in $$changed_dirs; do \
+	echo "--> Linting $$target"; \
+	$(golangci_lint_cmd) run $(1) --timeout=10m "$$target" || exit $$?; \
+done
+endef
 
 lint:
-	@echo "--> Running linter"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) incremental
+	@echo "--> Running incremental linter"
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@bash -lc '$(call lint_changed_dirs,)'
 
 lint-fix:
-	@echo "--> Running linter"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) incremental fix
+	@echo "--> Running incremental linter with fixes"
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@bash -lc '$(call lint_changed_dirs,--fix --out-format=tab --issues-exit-code=0)'
 
 lint-all:
 	@echo "--> Running full linter"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) full
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(golangci_lint_cmd) run --timeout=15m ./...
 
 lint-fix-all:
 	@echo "--> Running full linter with fixes"
-	@GOLANGCI_LINT_VERSION=$(golangci_version) $(LINT_SCRIPT) full fix
+	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
+	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
+
+hooks:
+	@$(GO) install github.com/evilmartians/lefthook@$(LEFTHOOK_VERSION)
+	@$(lefthook_cmd) install
 
 ###############################################################################
 ###                        Docker                                           ###

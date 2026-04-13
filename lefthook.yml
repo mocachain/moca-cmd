@@ -1,0 +1,5 @@
+pre-commit:
+  parallel: false
+  commands:
+    local-checks:
+      run: ./scripts/pre-commit.sh
