@@ -281,7 +281,7 @@ func createBucket(ctx *cli.Context) error {
 
 	visibility := ctx.Generic(visibilityFlag)
 	if visibility != "" {
-		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprintf("%s", visibility))
+		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprint(visibility))
 		if typeErr != nil {
 			return typeErr
 		}
@@ -343,7 +343,7 @@ func updateBucket(ctx *cli.Context) error {
 
 	visibility := ctx.Generic(visibilityFlag)
 	if visibility != "" {
-		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprintf("%s", visibility))
+		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprint(visibility))
 		if typeErr != nil {
 			return typeErr
 		}

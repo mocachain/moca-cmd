@@ -19,18 +19,26 @@ endif
 build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
 
-golangci_lint_cmd=golangci-lint
-golangci_version=v1.51.2
+GO_GOBIN := $(shell $(GO) env GOBIN)
+GO_GOPATH := $(shell $(GO) env GOPATH)
+
+ifeq ($(GO_GOBIN),)
+golangci_lint_cmd=$(GO_GOPATH)/bin/golangci-lint
+else
+golangci_lint_cmd=$(GO_GOBIN)/golangci-lint
+endif
+
+golangci_version=latest
 
 lint:
 	@echo "--> Running linter"
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(golangci_lint_cmd) run --timeout=10m
+	@$(golangci_lint_cmd) run --timeout=99m --concurrency=1
 
 lint-fix:
 	@echo "--> Running linter"
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
+	@$(golangci_lint_cmd) run --fix --timeout=99m --concurrency=1 --out-format=tab --issues-exit-code=0
 
 ###############################################################################
 ###                        Docker                                           ###

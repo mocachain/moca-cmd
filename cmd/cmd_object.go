@@ -552,7 +552,7 @@ func uploadFolder(urlInfo string, ctx *cli.Context,
 	}
 
 	if visibility != "" {
-		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprintf("%s", visibility))
+		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprint(visibility))
 		if typeErr != nil {
 			return typeErr
 		}
@@ -590,10 +590,10 @@ func uploadFolderByTask(ctx *cli.Context, homeDir string, mocaClient client.ICli
 		err := uploadFileByTask(object.BucketName, object.ObjectName, object.FilePath, taskState.Flag, mocaClient, object.UploadSingleFolder, object.ObjectSize)
 		if err != nil {
 			taskState.UpdateObjectState(index, TaskObjectStatusFailed, err.Error())
-			fmt.Printf("\r%s", fmt.Sprintf("%s %s %s", TaskObjectStatusFailed, object.ObjectName, err.Error()))
+			fmt.Printf("\r%s %s %s", TaskObjectStatusFailed, object.ObjectName, err.Error())
 		} else {
 			taskState.UpdateObjectState(index, TaskObjectStatusCreated, "")
-			fmt.Printf("\r%s", fmt.Sprintf("%s %s %s", TaskObjectStatusCreated, object.ObjectName, ""))
+			fmt.Printf("\r%s %s %s", TaskObjectStatusCreated, object.ObjectName, "")
 		}
 	}
 
@@ -635,7 +635,7 @@ func sealChecker(ctx *cli.Context, taskState *TaskState, mocaClient client.IClie
 
 		if headObjOutput.ObjectInfo.GetObjectStatus().String() == "OBJECT_STATUS_SEALED" {
 			taskState.UpdateObjectState(objectOffset, TaskObjectStatusSeal, "")
-			fmt.Printf("\r%s", fmt.Sprintf("%s %s %s", TaskObjectStatusSeal, utj.ObjectName, ""))
+			fmt.Printf("\r%s %s %s", TaskObjectStatusSeal, utj.ObjectName, "")
 			objectOffset++
 		}
 	}
@@ -697,7 +697,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 
 	visibility := ctx.Generic(visibilityFlag)
 	if visibility != "" {
-		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprintf("%s", visibility))
+		visibilityTypeVal, typeErr := getVisibilityType(fmt.Sprint(visibility))
 		if typeErr != nil {
 			return typeErr
 		}
@@ -1191,7 +1191,7 @@ func updateObject(ctx *cli.Context) error {
 		return toCmdErr(fmt.Errorf("visibity must set to be updated"))
 	}
 
-	visibilityType, typeErr := getVisibilityType(fmt.Sprintf("%s", visibility))
+	visibilityType, typeErr := getVisibilityType(fmt.Sprint(visibility))
 	if typeErr != nil {
 		return typeErr
 	}
