@@ -14,7 +14,7 @@ ifdef GITHUB_TOKEN
   $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
 endif
 
-.PHONY: all build
+.PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks
 
 build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
@@ -33,29 +33,28 @@ golangci_lint_cmd=$(GO_GOBIN)/golangci-lint
 lefthook_cmd=$(GO_GOBIN)/lefthook
 endif
 
-lint:
-	@echo "--> Running incremental linter"
+install-deps:
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m
-
-lint-fix:
-	@echo "--> Running incremental linter with fixes"
-	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m --fix --out-format=tab --issues-exit-code=0
-
-lint-all:
-	@echo "--> Running full linter"
-	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(golangci_lint_cmd) run --timeout=15m ./...
-
-lint-fix-all:
-	@echo "--> Running full linter with fixes"
-	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
-
-hooks:
 	@$(GO) install github.com/evilmartians/lefthook@$(LEFTHOOK_VERSION)
 	@$(lefthook_cmd) install
+
+lint: install-deps
+	@echo "--> Running incremental linter"
+	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m
+
+lint-fix: install-deps
+	@echo "--> Running incremental linter with fixes"
+	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m --fix --out-format=tab --issues-exit-code=0
+
+lint-all: install-deps
+	@echo "--> Running full linter"
+	@$(golangci_lint_cmd) run --timeout=15m ./...
+
+lint-fix-all: install-deps
+	@echo "--> Running full linter with fixes"
+	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
+
+hooks: install-deps
 
 ###############################################################################
 ###                        Docker                                           ###
