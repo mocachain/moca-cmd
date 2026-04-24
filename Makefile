@@ -14,12 +14,13 @@ ifdef GITHUB_TOKEN
   $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
 endif
 
-.PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks
+.PHONY: all build install-deps install-devtools install-lint install-staticcheck check-go-env check-lint check-staticcheck lint lint-fix lint-all lint-fix-all hooks pre-commit pre-commit-staged
 
 build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
 
 golangci_version=v1.64.8
+staticcheck_version=v0.6.1
 LEFTHOOK_VERSION=v1.11.3
 INCREMENTAL_LINT_SCRIPT=./scripts/run-incremental-lint.sh
 GO_GOBIN := $(shell $(GO) env GOBIN)
@@ -28,31 +29,75 @@ GO_GOPATH := $(shell $(GO) env GOPATH)
 ifeq ($(GO_GOBIN),)
 golangci_lint_cmd=$(GO_GOPATH)/bin/golangci-lint
 lefthook_cmd=$(GO_GOPATH)/bin/lefthook
+staticcheck_cmd=$(GO_GOPATH)/bin/staticcheck
 else
 golangci_lint_cmd=$(GO_GOBIN)/golangci-lint
 lefthook_cmd=$(GO_GOBIN)/lefthook
+staticcheck_cmd=$(GO_GOBIN)/staticcheck
 endif
 
-install-deps:
+install-lint:
 	@$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@$(golangci_version)
-	@$(GO) install github.com/evilmartians/lefthook@$(LEFTHOOK_VERSION)
+
+install-staticcheck:
+	@$(GO) install honnef.co/go/tools/cmd/staticcheck@$(staticcheck_version)
+
+install-devtools: install-lint install-staticcheck
+
+install-deps: install-devtools hooks
+
+check-go-env:
+	@echo "--> Using Go toolchain: $(GO_TOOLCHAIN)"
+	@$(GO) version
+
+check-lint:
+	@if [ ! -x "$(golangci_lint_cmd)" ]; then \
+		echo "golangci-lint not found at $(golangci_lint_cmd)"; \
+		echo "Run 'make install-lint' first."; \
+		exit 1; \
+	fi
+	@echo "--> Using golangci-lint binary: $(golangci_lint_cmd)"
+	@$(golangci_lint_cmd) version
+
+check-staticcheck:
+	@if [ ! -x "$(staticcheck_cmd)" ]; then \
+		echo "staticcheck not found at $(staticcheck_cmd)"; \
+		echo "Run 'make install-staticcheck' first."; \
+		exit 1; \
+	fi
+	@echo "--> Using staticcheck binary: $(staticcheck_cmd)"
+	@$(staticcheck_cmd) -version
+
+hooks:
+	@if [ ! -x "$(lefthook_cmd)" ]; then \
+		echo "--> Installing lefthook $(LEFTHOOK_VERSION) into $$(dirname "$(lefthook_cmd)")"; \
+		$(GO) install github.com/evilmartians/lefthook@$(LEFTHOOK_VERSION); \
+	else \
+		echo "--> Using lefthook binary: $(lefthook_cmd)"; \
+	fi
 	@$(lefthook_cmd) install
 
-lint: install-deps
+lint: check-go-env check-lint
 	@echo "--> Running incremental linter"
 	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m
 
-lint-fix: install-deps
+lint-fix: check-go-env check-lint
 	@echo "--> Running incremental linter with fixes"
 	@$(INCREMENTAL_LINT_SCRIPT) "$(golangci_lint_cmd)" 10m --fix --out-format=tab --issues-exit-code=0
 
-lint-all: install-deps
+lint-all: check-go-env check-lint
 	@echo "--> Running full linter"
 	@$(golangci_lint_cmd) run --timeout=15m ./...
 
-lint-fix-all: install-deps
+lint-fix-all: check-go-env check-lint
 	@echo "--> Running full linter with fixes"
 	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
+
+pre-commit: check-go-env check-staticcheck
+	@./scripts/pre-commit.sh local "$(staticcheck_cmd)"
+
+pre-commit-staged: check-go-env check-staticcheck
+	@./scripts/pre-commit.sh staged "$(staticcheck_cmd)"
 
 ###############################################################################
 ###                        Docker                                           ###
