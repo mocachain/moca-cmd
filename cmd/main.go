@@ -137,7 +137,6 @@ func main() {
 				Subcommands: []*cli.Command{
 					cmdTransfer(),
 					cmdGetAccountBalance(),
-					cmdBridge(),
 				},
 			},
 			{
