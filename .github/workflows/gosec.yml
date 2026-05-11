@@ -32,6 +32,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: moca-cmd
+      - name: Checkout moca
+        uses: actions/checkout@v4
+        with:
+          repository: mocachain/moca
+          ref: main
+          path: moca
+      - name: Checkout moca-go-sdk
+        uses: actions/checkout@v4
+        with:
+          repository: mocachain/moca-go-sdk
+          ref: feat/evmos_replace
+          path: moca-go-sdk
+      - name: Checkout moca-common
+        uses: actions/checkout@v4
+        with:
+          repository: mocachain/moca-common
+          ref: feat/evmos_replace
+          path: moca-common
       - uses: actions/cache@v4
         with:
           # In order:
