@@ -1,9 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-mode="${1:?missing mode}"
-staticcheck_bin="${2:?missing staticcheck binary path}"
-
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root"
 
@@ -19,12 +16,6 @@ if [[ -z "$go_toolchain" ]]; then
   exit 1
 fi
 export GOTOOLCHAIN="$go_toolchain"
-export GIT_TERMINAL_PROMPT=0
-
-if [[ ! -x "$staticcheck_bin" ]]; then
-  echo "staticcheck binary not found at $staticcheck_bin; run 'make install-staticcheck' first." >&2
-  exit 1
-fi
 
 if ! go version >/dev/null 2>&1; then
   echo "Unable to activate Go toolchain ${go_toolchain}; falling back to local toolchain." >&2
@@ -32,22 +23,6 @@ if ! go version >/dev/null 2>&1; then
 fi
 
 staticcheck_version="v0.6.1"
-
-module_changed="$(
-  eval "$change_list_cmd" | grep -E '(^|/)(go\.mod|go\.sum)$' || true
-)"
-
-if [[ -n "$module_changed" ]]; then
-  echo "Detected go.mod/go.sum changes; running go mod tidy with ${go_toolchain}..."
-  go mod tidy
-
-  if ! git diff --quiet -- go.mod go.sum; then
-    echo "go.mod or go.sum changed after go mod tidy; please review and re-stage them." >&2
-    exit 1
-  fi
-else
-  echo "No go.mod/go.sum changes detected; skipping go mod tidy."
-fi
 
 echo "Running go mod tidy with ${go_toolchain}..."
 if grep -qE '=> \.\./' go.mod; then
@@ -72,9 +47,13 @@ if grep -qE '=> \.\./' go.mod; then
   exit 0
 fi
 
-echo "Running staticcheck on changed Go packages..."
-while IFS= read -r dir; do
-  [[ -z "$dir" ]] && continue
-  echo "--> staticcheck $dir"
-  "$staticcheck_bin" "$dir"
-done <<< "$changed_dirs"
+gobin="$(go env GOBIN)"
+if [[ -n "$gobin" ]]; then
+  staticcheck_bin="$gobin/staticcheck"
+else
+  gopath="$(go env GOPATH)"
+  staticcheck_bin="$gopath/bin/staticcheck"
+fi
+
+echo "Running staticcheck..."
+"$staticcheck_bin" ./...
