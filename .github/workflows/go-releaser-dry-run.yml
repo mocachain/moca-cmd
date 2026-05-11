@@ -12,6 +12,9 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     environment: release
+    defaults:
+      run:
+        working-directory: moca-cmd
     env:
       GOPRIVATE: github.com/mocachain
       GONOSUMDB: github.com/mocachain
@@ -21,6 +24,28 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+          path: moca-cmd
+      - name: Checkout moca
+        uses: actions/checkout@v4
+        with:
+          repository: mocachain/moca
+          ref: 925b543c3b63bc0ddd99b932fe6914f41b53ce7c
+          path: moca
+          token: ${{ secrets.GH_ACCESS_SECRET }}
+      - name: Checkout moca-go-sdk
+        uses: actions/checkout@v4
+        with:
+          repository: mocachain/moca-go-sdk
+          ref: a8cbdd1da3f6fb715cd5fbf998f211ce44a784b7
+          path: moca-go-sdk
+          token: ${{ secrets.GH_ACCESS_SECRET }}
+      - name: Checkout moca-common
+        uses: actions/checkout@v4
+        with:
+          repository: mocachain/moca-common
+          ref: 4c8a3ef119043c7bb2a3a3f55911b0993f503fe6
+          path: moca-common
+          token: ${{ secrets.GH_ACCESS_SECRET }}
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -28,7 +53,5 @@ jobs:
           check-latest: true
       - name: Setup GitHub Token
         run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
-      - name: Prepare CI module replacements
-        run: bash ./scripts/prepare-ci-go-mod.sh
       - name: release dry run
         run: make release-dry-run

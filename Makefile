@@ -21,6 +21,17 @@ ifneq ($(wildcard $(HOME)/.gitconfig),)
 GITCONFIG_MOUNT := -v $(HOME)/.gitconfig:/root/.gitconfig:ro
 endif
 
+LOCAL_REPLACE_MOUNTS :=
+ifneq ($(wildcard ../moca/go.mod),)
+LOCAL_REPLACE_MOUNTS += -v $(abspath ../moca):/go/src/github.com/mocachain/moca
+endif
+ifneq ($(wildcard ../moca-go-sdk/go.mod),)
+LOCAL_REPLACE_MOUNTS += -v $(abspath ../moca-go-sdk):/go/src/github.com/mocachain/moca-go-sdk
+endif
+ifneq ($(wildcard ../moca-common/go/go.mod),)
+LOCAL_REPLACE_MOUNTS += -v $(abspath ../moca-common):/go/src/github.com/mocachain/moca-common
+endif
+
 .PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks pre-commit-staged
 
 build:
@@ -115,6 +126,7 @@ release-dry-run:
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
 		-v ${GOPATH}/pkg:/go/pkg \
 		$(GITCONFIG_MOUNT) \
+		$(LOCAL_REPLACE_MOUNTS) \
 		-w /go/src/$(PACKAGE_NAME) \
 		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
 		--clean --skip validate --skip publish --snapshot
@@ -135,6 +147,7 @@ release:
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
 		$(GITCONFIG_MOUNT) \
+		$(LOCAL_REPLACE_MOUNTS) \
 		-w /go/src/$(PACKAGE_NAME) \
 		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
 		release --clean --skip validate
