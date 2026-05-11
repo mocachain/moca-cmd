@@ -32,6 +32,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       GOPRIVATE: github.com/mocachain
+      GONOSUMDB: github.com/mocachain
+      GOPROXY: https://proxy.golang.org,direct
       GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_SECRET }}
     steps:
       - uses: actions/setup-go@v5
@@ -57,6 +59,8 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+      - name: Prepare CI module replacements
+        run: bash ./scripts/prepare-ci-go-mod.sh
       - run: |
           go mod tidy
           go mod download
@@ -75,6 +79,7 @@ jobs:
         with:
           version: v1.64.8
           skip-pkg-cache: true
+          skip-save-cache: true
           args: --timeout=10m --new-from-rev=${{ steps.lint-base.outputs.base_ref }} --whole-files
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
       - name: golangci-lint full
@@ -82,5 +87,6 @@ jobs:
         with:
           version: v1.64.8
           skip-pkg-cache: true
+          skip-save-cache: true
           args: --timeout=15m
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.lint_scope == 'full' }}

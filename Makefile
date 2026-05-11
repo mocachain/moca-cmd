@@ -8,10 +8,17 @@ export
 # system-wide Go release is installed.
 GO_TOOLCHAIN ?= go1.23.12
 GO := env GOTOOLCHAIN=$(GO_TOOLCHAIN) go
+GOPROXY ?= https://proxy.golang.org,direct
+GONOSUMDB ?= github.com/mocachain
 
 # Configure git to use HTTPS+Token for private repositories if GITHUB_TOKEN is set
 ifdef GITHUB_TOKEN
   $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
+endif
+
+GITCONFIG_MOUNT :=
+ifneq ($(wildcard $(HOME)/.gitconfig),)
+GITCONFIG_MOUNT := -v $(HOME)/.gitconfig:/root/.gitconfig:ro
 endif
 
 .PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks pre-commit-staged
@@ -101,9 +108,13 @@ release-dry-run:
 		--rm \
 		--privileged \
 		-e CGO_ENABLED=1 \
+		-e GOPROXY=$(GOPROXY) \
+		-e GOPRIVATE=$(GOPRIVATE) \
+		-e GONOSUMDB=$(GONOSUMDB) \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
 		-v ${GOPATH}/pkg:/go/pkg \
+		$(GITCONFIG_MOUNT) \
 		-w /go/src/$(PACKAGE_NAME) \
 		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
 		--clean --skip validate --skip publish --snapshot
@@ -117,9 +128,13 @@ release:
 		--rm \
 		--privileged \
 		-e CGO_ENABLED=1 \
+		-e GOPROXY=$(GOPROXY) \
+		-e GOPRIVATE=$(GOPRIVATE) \
+		-e GONOSUMDB=$(GONOSUMDB) \
 		--env-file .release-env \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
+		$(GITCONFIG_MOUNT) \
 		-w /go/src/$(PACKAGE_NAME) \
 		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
 		release --clean --skip validate

@@ -12,6 +12,11 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     environment: release
+    env:
+      GOPRIVATE: github.com/mocachain
+      GONOSUMDB: github.com/mocachain
+      GOPROXY: https://proxy.golang.org,direct
+      GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_SECRET }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,5 +26,9 @@ jobs:
         with:
           go-version: "1.23.x"
           check-latest: true
+      - name: Setup GitHub Token
+        run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+      - name: Prepare CI module replacements
+        run: bash ./scripts/prepare-ci-go-mod.sh
       - name: release dry run
         run: make release-dry-run

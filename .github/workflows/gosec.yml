@@ -19,6 +19,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       GOPRIVATE: github.com/mocachain
+      GONOSUMDB: github.com/mocachain
+      GOPROXY: https://proxy.golang.org,direct
       GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_SECRET }}
     steps:
       - uses: actions/setup-go@v5
@@ -42,6 +44,8 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+      - name: Prepare CI module replacements
+        run: bash ./scripts/prepare-ci-go-mod.sh
       - run: |
           go mod tidy
           go mod download
