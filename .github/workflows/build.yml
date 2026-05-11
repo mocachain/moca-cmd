@@ -25,6 +25,8 @@ jobs:
       GOPRIVATE: github.com/mocachain
       GONOSUMDB: github.com/mocachain
       GOPROXY: https://proxy.golang.org,direct
+      GOTOOLCHAIN: local
+      GO_TOOLCHAIN: local
       GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
     steps:
       - name: Install Go
