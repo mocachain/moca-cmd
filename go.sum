@@ -195,8 +195,6 @@ github.com/cosmos/gogogateway v1.2.0/go.mod h1:iQpLkGWxYcnCdz5iAdLcRBSw3h7NXeOkZ
 github.com/cosmos/gogoproto v1.4.2/go.mod h1:cLxOsn1ljAHSV527CHOtaIP91kK6cCrZETRBrkzItWU=
 github.com/cosmos/gogoproto v1.7.2 h1:5G25McIraOC0mRFv9TVO139Uh3OklV2hczr13KKVHCA=
 github.com/cosmos/gogoproto v1.7.2/go.mod h1:8S7w53P1Y1cHwND64o0BnArT6RmdgIvsBuco6uTllsk=
-github.com/cosmos/ibc-go/modules/capability v1.0.1 h1:ibwhrpJ3SftEEZRxCRkH0fQZ9svjthrX2+oXdZvzgGI=
-github.com/cosmos/ibc-go/modules/capability v1.0.1/go.mod h1:rquyOV262nGJplkumH+/LeYs04P3eV8oB7ZM4Ygqk4E=
 github.com/cosmos/ics23/go v0.11.0 h1:jk5skjT0TqX5e5QJbEnwXIS2yI2vnmLOgpQPeM5RtnU=
 github.com/cosmos/ics23/go v0.11.0/go.mod h1:A8OjxPE67hHST4Icw94hOxxFEJMBG031xIGF/JHNIY0=
 github.com/cosmos/ledger-cosmos-go v0.14.0 h1:WfCHricT3rPbkPSVKRH+L4fQGKYHuGOK9Edpel8TYpE=
@@ -322,6 +320,7 @@ github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/go-stack/stack v1.8.1 h1:ntEHSVwIt7PNXNpgPmVfMrNhLtgjlmnZha2kOpuRiDw=
 github.com/go-stack/stack v1.8.1/go.mod h1:dcoOX6HbPZSZptuspn9bctJ+N/CnF5gGygcUP3XYfe4=
+github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0/go.mod h1:fyg7847qk6SyHyPtNmDHnmrv/HOrqktSC+C9fM+CJOE=
 github.com/gobwas/httphead v0.0.0-20180130184737-2c6c146eadee/go.mod h1:L0fX3K22YWvt/FAX9NnzrNzcI4wNYi9Yku4O0LKYflo=
 github.com/gobwas/pool v0.2.0/go.mod h1:q8bcK0KcYlCgd9e7WYLm9LpyS+YeLd8JVDW6WezmKEw=
 github.com/gobwas/ws v1.0.2/go.mod h1:szmBTxLgaFppYjEmNtny/v3w89xOydFnnZMcgRRu/EM=
@@ -457,8 +456,8 @@ github.com/hashicorp/go-uuid v1.0.1/go.mod h1:6SBZvOh/SIDV7/2o3Jml5SYk/TvGqwFJ/b
 github.com/hashicorp/go-uuid v1.0.2 h1:cfejS+Tpcp13yd5nYHWDI6qVCny6wyX2Mt5SGur2IGE=
 github.com/hashicorp/go-uuid v1.0.2/go.mod h1:6SBZvOh/SIDV7/2o3Jml5SYk/TvGqwFJ/bN7x4byOro=
 github.com/hashicorp/go-version v1.2.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
-github.com/hashicorp/go-version v1.6.0 h1:feTTfFNnjP967rlCxM/I9g701jU+RN74YKx2mOkIeek=
-github.com/hashicorp/go-version v1.6.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
+github.com/hashicorp/go-version v1.9.0 h1:CeOIz6k+LoN3qX9Z0tyQrPtiB1DFYRPfCIBtaXPSCnA=
+github.com/hashicorp/go-version v1.9.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
 github.com/hashicorp/go.net v0.0.1/go.mod h1:hjKkEWcCURg++eb33jQU7oqQcI9XDCnUzHA0oac0k90=
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
@@ -608,8 +607,6 @@ github.com/mocachain/moca-cometbft v1.2.0-rc0.0.20260320015437-83994359d443 h1:k
 github.com/mocachain/moca-cometbft v1.2.0-rc0.0.20260320015437-83994359d443/go.mod h1:K2CikF6RigL+TVti00VmQbn94M+c5dGwNEROLIv7tZU=
 github.com/mocachain/moca-cometbft-db v1.1.1-0.20260316053933-22256c4c85b3 h1:Ggx4IAYWhQJlYychgmHvO9QqgITlzjsqeqVH7jhVh1E=
 github.com/mocachain/moca-cometbft-db v1.1.1-0.20260316053933-22256c4c85b3/go.mod h1:GDPJAC/iFHNjmZZPN8V8C1yr/eyityhi2W1hz2MGKSc=
-github.com/mocachain/moca-common/go v1.2.0-rc1.0.20260320043131-de7b6add70a3 h1:A4vO86Z965dGYqKUfMCIc9W1rtwAWcZdrtFs+k8pnVM=
-github.com/mocachain/moca-common/go v1.2.0-rc1.0.20260320043131-de7b6add70a3/go.mod h1:62axuS+RwQqIbxtq1w4N30SaBx81UYD8pjzb55R4aG0=
 github.com/mocachain/moca-cosmos-sdk v1.2.0-rc0.0.20260320043122-0edb2e9d600f h1:xhL/OklvEScO0rSBph2JhVdLVCB2YiI38XA785+c7uI=
 github.com/mocachain/moca-cosmos-sdk v1.2.0-rc0.0.20260320043122-0edb2e9d600f/go.mod h1:ZgYul/7/frTOe8dBdIhYv5BbUSKlSkOasY3gHlc0f40=
 github.com/mocachain/moca-cosmos-sdk/api v1.2.0-rc0.0.20260320043122-0edb2e9d600f h1:7QFEzi3ulBVJOp6pDfKpQeTUH8TUzjAi+xRDsHKpdwA=
@@ -630,14 +627,8 @@ github.com/mocachain/moca-cosmos-sdk/x/tx v1.2.0-rc0.0.20260320043122-0edb2e9d60
 github.com/mocachain/moca-cosmos-sdk/x/tx v1.2.0-rc0.0.20260320043122-0edb2e9d600f/go.mod h1:BzadNhNv2oz9xhBOi7Zo7j86QpJvYAo/T1bgT4JmeuY=
 github.com/mocachain/moca-cosmos-sdk/x/upgrade v1.2.0-rc0.0.20260320043122-0edb2e9d600f h1:H9WfnBI+4zIOZw1nkpMpLqW0zeHiW6SRKlBbm+zto20=
 github.com/mocachain/moca-cosmos-sdk/x/upgrade v1.2.0-rc0.0.20260320043122-0edb2e9d600f/go.mod h1:jdpDFW5XRlHTj7+OMAsgMPojwt1bJJGzLn6Pn0oHZ0k=
-github.com/mocachain/moca-go-sdk v1.2.0-rc1.0.20260320043142-d578d73e2599 h1:x9p8NPCttTRUmuyocVGDGWmrGOMJQmINAIcd9sD5+Ck=
-github.com/mocachain/moca-go-sdk v1.2.0-rc1.0.20260320043142-d578d73e2599/go.mod h1:FjCKp4xHQN/YnYgN+cA/7DH42F+9UIjNEY9jGavUP4E=
 github.com/mocachain/moca-iavl v1.2.0-rc0.0.20260318093905-7d754d41e8e9 h1:p6kktdDRLMDsQe16y6J5Wm8y0zgg4WgJNAGCZ071Ec4=
 github.com/mocachain/moca-iavl v1.2.0-rc0.0.20260318093905-7d754d41e8e9/go.mod h1:llfcEJML+85FDrd1XlU6YRa7tFnyPYK/T04iOSXe+1I=
-github.com/mocachain/moca-ibc-go/v10 v10.2.0-rc0.0.20260320043125-89f62f919f39 h1:uoGjNgDGQOtpAlNt4ix4KZmTRkJ9koNh4FLh1igNJ10=
-github.com/mocachain/moca-ibc-go/v10 v10.2.0-rc0.0.20260320043125-89f62f919f39/go.mod h1:M9ckp5qY21Kz1kCvFFEF735KXYAbP+O53CbJgtmvzqc=
-github.com/mocachain/moca/v12 v12.2.0-rc4.0.20260320060615-9f8f08384ec3 h1:jJwGt/OiE3v/jF1rQ0XQN8J+IaO7wnbnvmGo0jd7czI=
-github.com/mocachain/moca/v12 v12.2.0-rc4.0.20260320060615-9f8f08384ec3/go.mod h1:/H8qfigoI3Tx0Tp75jPhLBmsofY+Ui8rgupcswsAQng=
 github.com/mocachain/polygon-edge v1.3.3-moca.1 h1:YtHnpIxMOUkCFp6Z+BHt8wCb+35+HpCVMZ/dFUylzBs=
 github.com/mocachain/polygon-edge v1.3.3-moca.1/go.mod h1:bDvHrg7QQKSx31K588TEWgHICl5dCPkotffzK9CE6IE=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
@@ -661,6 +652,7 @@ github.com/nats-io/nkeys v0.1.3/go.mod h1:xpnFELMwJABBLVhffcfd1MZx6VsNRFpEugbxzi
 github.com/nats-io/nuid v1.0.1/go.mod h1:19wcPz3Ph3q0Jbyiqsd0kePYG7A95tJPxeL+1OSON2c=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
+github.com/nxadm/tail v1.4.8/go.mod h1:+ncqLTQzXmGhMZNUePPaPqPvBxHAIsmXswZKocGu+AU=
 github.com/nxadm/tail v1.4.11 h1:8feyoE3OzPrcshW5/MJ4sGESc5cqmGkGCWlco4l0bqY=
 github.com/nxadm/tail v1.4.11/go.mod h1:OTaG3NK980DZzxbRq6lEuzgU+mug70nY11sMd4JXXHc=
 github.com/oasisprotocol/curve25519-voi v0.0.0-20230904125328-1f23a7beb09a h1:dlRvE5fWabOchtH7znfiFCcOvmIYgOeAS5ifBXBlh9Q=
@@ -1085,6 +1077,7 @@ golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20210112080510-489259a85091/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210119212857-b64e53b001e4/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210324051608-47abb6519492/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210330210617-4fbd30eecc44/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
@@ -1140,6 +1133,7 @@ golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e/go.mod h1:b+2E5dAYhXwXZwtn
 golang.org/x/tools v0.0.0-20200103221440-774c71fcf114/go.mod h1:TB2adYChydJhpapKDTa4BR/hXlZSLoq2Wpct/0txZ28=
 golang.org/x/tools v0.0.0-20200207183749-b753a1ba74fa/go.mod h1:TB2adYChydJhpapKDTa4BR/hXlZSLoq2Wpct/0txZ28=
 golang.org/x/tools v0.0.0-20200619180055-7c47624df98f/go.mod h1:EkVYQZoAsY45+roYkvgYkIh4xh/qjgUK9TdY2XT94GE=
+golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e/go.mod h1:emZCQorbCU4vsT4fOWvOPXz4eW1wZW4PmDk9uLelYpA=
 golang.org/x/tools v0.0.0-20210106214847-113979e3529a/go.mod h1:emZCQorbCU4vsT4fOWvOPXz4eW1wZW4PmDk9uLelYpA=
 golang.org/x/tools v0.1.1/go.mod h1:o0xws9oXOQQZyjljx8fwUC0k7L1pTE6eaCbjGeHmOkk=
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=

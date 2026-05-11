@@ -26,10 +26,10 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/term"
 
-	"github.com/evmos/evmos/v12/sdk/types"
-	permTypes "github.com/evmos/evmos/v12/x/permission/types"
-	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
-	vgTypes "github.com/evmos/evmos/v12/x/virtualgroup/types"
+	"github.com/mocachain/moca/v2/sdk/types"
+	permTypes "github.com/mocachain/moca/v2/x/permission/types"
+	storageTypes "github.com/mocachain/moca/v2/x/storage/types"
+	vgTypes "github.com/mocachain/moca/v2/x/virtualgroup/types"
 	sdkutils "github.com/mocachain/moca-go-sdk/pkg/utils"
 	sdktypes "github.com/mocachain/moca-go-sdk/types"
 )

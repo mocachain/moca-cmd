@@ -14,7 +14,7 @@ ifdef GITHUB_TOKEN
   $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
 endif
 
-.PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks
+.PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks pre-commit-staged
 
 build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
@@ -54,6 +54,9 @@ lint-fix-all: install-deps
 	@echo "--> Running full linter with fixes"
 	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
 
+pre-commit-staged:
+	@./scripts/pre-commit.sh
+
 ###############################################################################
 ###                        Docker                                           ###
 ###############################################################################
@@ -90,7 +93,7 @@ stop-dc:
 ###                                Releasing                                ###
 ###############################################################################
 
-PACKAGE_NAME:=github.com/evmos/evmos
+PACKAGE_NAME:=github.com/mocachain/moca-cmd
 GOLANG_CROSS_VERSION  = v1.23
 GOPATH ?= $(HOME)/go
 release-dry-run:

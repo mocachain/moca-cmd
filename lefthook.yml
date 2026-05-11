@@ -2,4 +2,5 @@ pre-commit:
   parallel: false
   commands:
     local-checks:
-      run: ./scripts/pre-commit.sh
+      interactive: true
+      run: make -C "$(dirname "$(git rev-parse --absolute-git-dir)")" pre-commit-staged
