@@ -240,11 +240,7 @@ replace (
 	github.com/cosmos/iavl => github.com/mocachain/moca-iavl v1.2.0-rc0.0.20260318093905-7d754d41e8e9
 	github.com/cosmos/ibc-go/v10 => github.com/mocachain/moca-ibc-go/v10 v10.2.0-rc0.0.20260320043125-89f62f919f39
 	github.com/ethereum/go-ethereum => github.com/mocachain/go-ethereum v1.10.27-moca.2.0.20260318105122-e849a5b4edee
-	github.com/evmos/evmos/v12 => ../moca
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-	github.com/mocachain/moca-common/go => ../moca-common/go
-	github.com/mocachain/moca-go-sdk => ../moca-go-sdk
 	github.com/mocachain/moca-juno/v4 => github.com/mocachain/moca-juno/v4 v4.2.0-rc0.0.20260320043135-b1f1e6fd4e65
-	github.com/mocachain/moca/v2 => ../moca
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )

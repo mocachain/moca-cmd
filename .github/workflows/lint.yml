@@ -46,24 +46,6 @@ jobs:
         with:
           fetch-depth: 0
           path: moca-cmd
-      - name: Checkout moca
-        uses: actions/checkout@v4
-        with:
-          repository: mocachain/moca
-          ref: main
-          path: moca
-      - name: Checkout moca-go-sdk
-        uses: actions/checkout@v4
-        with:
-          repository: mocachain/moca-go-sdk
-          ref: feat/evmos_replace
-          path: moca-go-sdk
-      - name: Checkout moca-common
-        uses: actions/checkout@v4
-        with:
-          repository: mocachain/moca-common
-          ref: feat/evmos_replace
-          path: moca-common
       - uses: actions/cache@v4
         with:
           # In order:
@@ -97,7 +79,6 @@ jobs:
           version: v1.64.8
           working-directory: moca-cmd
           skip-pkg-cache: true
-          skip-save-cache: true
           args: --timeout=10m --new-from-rev=${{ steps.lint-base.outputs.base_ref }} --whole-files
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
       - name: golangci-lint full
@@ -106,6 +87,5 @@ jobs:
           version: v1.64.8
           working-directory: moca-cmd
           skip-pkg-cache: true
-          skip-save-cache: true
           args: --timeout=15m
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.lint_scope == 'full' }}
