@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/evmos/evmos/v12/sdk/types"
-	mocadTypes "github.com/evmos/evmos/v12/types"
-	permTypes "github.com/evmos/evmos/v12/x/permission/types"
+	"github.com/mocachain/moca/v2/sdk/types"
+	mocadTypes "github.com/mocachain/moca/v2/types"
+	permTypes "github.com/mocachain/moca/v2/x/permission/types"
 	"github.com/urfave/cli/v2"
 	"github.com/mocachain/moca-go-sdk/client"
 	"github.com/mocachain/moca-go-sdk/pkg/utils"

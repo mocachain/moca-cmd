@@ -8,13 +8,31 @@ export
 # system-wide Go release is installed.
 GO_TOOLCHAIN ?= go1.23.12
 GO := env GOTOOLCHAIN=$(GO_TOOLCHAIN) go
+GOPROXY ?= https://proxy.golang.org,direct
+GONOSUMDB ?= github.com/mocachain
 
 # Configure git to use HTTPS+Token for private repositories if GITHUB_TOKEN is set
 ifdef GITHUB_TOKEN
   $(shell git config --global url."https://$(GITHUB_TOKEN):@github.com/".insteadOf "https://github.com/" 2>/dev/null)
 endif
 
-.PHONY: all build install-deps install-devtools install-lint install-staticcheck check-go-env check-lint check-staticcheck lint lint-fix lint-all lint-fix-all hooks pre-commit pre-commit-staged
+GITCONFIG_MOUNT :=
+ifneq ($(wildcard $(HOME)/.gitconfig),)
+GITCONFIG_MOUNT := -v $(HOME)/.gitconfig:/root/.gitconfig:ro
+endif
+
+LOCAL_REPLACE_MOUNTS :=
+ifneq ($(wildcard ../moca/go.mod),)
+LOCAL_REPLACE_MOUNTS += -v $(abspath ../moca):/go/src/github.com/mocachain/moca
+endif
+ifneq ($(wildcard ../moca-go-sdk/go.mod),)
+LOCAL_REPLACE_MOUNTS += -v $(abspath ../moca-go-sdk):/go/src/github.com/mocachain/moca-go-sdk
+endif
+ifneq ($(wildcard ../moca-common/go/go.mod),)
+LOCAL_REPLACE_MOUNTS += -v $(abspath ../moca-common):/go/src/github.com/mocachain/moca-common
+endif
+
+.PHONY: all build install-deps lint lint-fix lint-all lint-fix-all hooks pre-commit-staged
 
 build:
 	$(GO) build -o ./build/moca-cmd cmd/*.go
@@ -93,11 +111,8 @@ lint-fix-all: check-go-env check-lint
 	@echo "--> Running full linter with fixes"
 	@$(golangci_lint_cmd) run --fix --timeout=15m --out-format=tab --issues-exit-code=0 ./...
 
-pre-commit: check-go-env check-staticcheck
-	@./scripts/pre-commit.sh local "$(staticcheck_cmd)"
-
-pre-commit-staged: check-go-env check-staticcheck
-	@./scripts/pre-commit.sh staged "$(staticcheck_cmd)"
+pre-commit-staged:
+	@./scripts/pre-commit.sh
 
 ###############################################################################
 ###                        Docker                                           ###
@@ -135,7 +150,7 @@ stop-dc:
 ###                                Releasing                                ###
 ###############################################################################
 
-PACKAGE_NAME:=github.com/evmos/evmos
+PACKAGE_NAME:=github.com/mocachain/moca-cmd
 GOLANG_CROSS_VERSION  = v1.23
 GOPATH ?= $(HOME)/go
 release-dry-run:
@@ -143,9 +158,14 @@ release-dry-run:
 		--rm \
 		--privileged \
 		-e CGO_ENABLED=1 \
+		-e GOPROXY=$(GOPROXY) \
+		-e GOPRIVATE=$(GOPRIVATE) \
+		-e GONOSUMDB=$(GONOSUMDB) \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
 		-v ${GOPATH}/pkg:/go/pkg \
+		$(GITCONFIG_MOUNT) \
+		$(LOCAL_REPLACE_MOUNTS) \
 		-w /go/src/$(PACKAGE_NAME) \
 		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
 		--clean --skip validate --skip publish --snapshot
@@ -159,9 +179,14 @@ release:
 		--rm \
 		--privileged \
 		-e CGO_ENABLED=1 \
+		-e GOPROXY=$(GOPROXY) \
+		-e GOPRIVATE=$(GOPRIVATE) \
+		-e GONOSUMDB=$(GONOSUMDB) \
 		--env-file .release-env \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
+		$(GITCONFIG_MOUNT) \
+		$(LOCAL_REPLACE_MOUNTS) \
 		-w /go/src/$(PACKAGE_NAME) \
 		ghcr.io/goreleaser/goreleaser-cross:${GOLANG_CROSS_VERSION} \
 		release --clean --skip validate

@@ -13,9 +13,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/urfave/cli/v2"
 
-	"github.com/evmos/evmos/v12/sdk/types"
-	mocadTypes "github.com/evmos/evmos/v12/types"
-	storageTypes "github.com/evmos/evmos/v12/x/storage/types"
+	"github.com/mocachain/moca/v2/sdk/types"
+	mocadTypes "github.com/mocachain/moca/v2/types"
+	storageTypes "github.com/mocachain/moca/v2/x/storage/types"
 	sdktypes "github.com/mocachain/moca-go-sdk/types"
 )
 

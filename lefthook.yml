@@ -3,4 +3,4 @@ pre-commit:
   commands:
     local-checks:
       interactive: true
-      run: make -C "$(git rev-parse --show-toplevel)" pre-commit-staged
+      run: make -C "$(dirname "$(git rev-parse --absolute-git-dir)")" pre-commit-staged
