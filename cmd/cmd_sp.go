@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sptypes "github.com/evmos/evmos/v12/x/sp/types"
-	"github.com/urfave/cli/v2"
 	"github.com/mocachain/moca-go-sdk/client"
+	sptypes "github.com/mocachain/moca/v2/x/sp/types"
+	"github.com/urfave/cli/v2"
 )
 
 func cmdListSP() *cli.Command {
