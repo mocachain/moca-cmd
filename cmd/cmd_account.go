@@ -175,36 +175,6 @@ $ moca-cmd bank transfer --toAddress 0x.. --amount 12345`,
 	}
 }
 
-// cmdBridge makes a transfer from Moca to BSC
-func cmdBridge() *cli.Command {
-	return &cli.Command{
-		Name:      "bridge",
-		Action:    Bridge,
-		Usage:     "transfer from moca to a BSC account",
-		ArgsUsage: "",
-		Description: `
-Create a cross chain transfer from Moca to a BSC account
-
-Examples:
-# Make a cross chain transfer to BSC
-$ moca-cmd bank bridge --toAddress 0x.. --amount 12345`,
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:     toAddressFlag,
-				Value:    "",
-				Usage:    "the receiver address in BSC",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     amountFlag,
-				Value:    "",
-				Usage:    "the amount of amoca to be sent",
-				Required: true,
-			},
-		},
-	}
-}
-
 func importKey(ctx *cli.Context) error {
 	var (
 		err               error
@@ -428,39 +398,6 @@ func createAccount(ctx *cli.Context) error {
 	checkAndWriteDefaultKey(homeDir, convertAddressToLower(key.Address.String()))
 
 	fmt.Printf("created new account: {%s}, keystore: %s \n", account.GetAddress(), keyFilePath)
-	return nil
-}
-
-func Bridge(ctx *cli.Context) error {
-	client, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
-	if err != nil {
-		return toCmdErr(err)
-	}
-
-	c, transfer := context.WithCancel(globalContext)
-	defer transfer()
-
-	toAddr := ctx.String(toAddressFlag)
-	_, err = sdk.AccAddressFromHexUnsafe(toAddr)
-	if err != nil {
-		return toCmdErr(err)
-	}
-	amountStr := ctx.String(amountFlag)
-	amount, ok := math.NewIntFromString(amountStr)
-	if !ok {
-		return toCmdErr(fmt.Errorf("%s is not valid amount", amount))
-	}
-	txResp, err := client.TransferOut(c, toAddr, amount, types.TxOption{})
-	if err != nil {
-		return toCmdErr(err)
-	}
-
-	err = waitTxnStatus(client, c, txResp.TxHash, "Bridge")
-	if err != nil {
-		return toCmdErr(err)
-	}
-
-	fmt.Printf("transfer out %s amoca to %s succ, txHash: %s\n", amountStr, toAddr, txResp.TxHash)
 	return nil
 }
 
