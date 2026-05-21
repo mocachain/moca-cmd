@@ -135,9 +135,6 @@ moca-cmd --keystore [keystore-path]  bucket create mc://test-bucket
 // transfer to an account in moca
 moca-cmd bank transfer --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
 
-// crosschain transfer some tokens to an account in BSC
-moca-cmd bank bridge --toAddress 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d --amount 12345
-
 // query the balance of account
 moca-cmd bank balance --address 0xF678C3734F0EcDCC56cDE2df2604AC1f8477D55d
 
