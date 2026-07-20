@@ -6,7 +6,7 @@ export
 
 # Keep local Go commands on the repository toolchain even when a newer
 # system-wide Go release is installed.
-GO_TOOLCHAIN ?= go1.23.12
+GO_TOOLCHAIN ?= go1.25.8
 GO := env GOTOOLCHAIN=$(GO_TOOLCHAIN) go
 
 # Configure git to use HTTPS+Token for private repositories if GITHUB_TOKEN is set
