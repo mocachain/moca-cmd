@@ -71,16 +71,14 @@ jobs:
           fi
           echo "base_ref=$(git merge-base HEAD \"$base_ref\")" >> "$GITHUB_OUTPUT"
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.64.8
-          skip-pkg-cache: true
+          version: v2.12.2
           args: --timeout=10m --new-from-rev=${{ steps.lint-base.outputs.base_ref }} --whole-files
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
       - name: golangci-lint full
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.64.8
-          skip-pkg-cache: true
+          version: v2.12.2
           args: --timeout=15m
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.lint_scope == 'full' }}
