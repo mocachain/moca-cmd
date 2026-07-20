@@ -64,12 +64,10 @@ jobs:
         id: lint-base
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
         run: |
-          if [ -n "${{ github.base_ref }}" ]; then
-            base_ref="origin/${{ github.base_ref }}"
-          else
-            base_ref="origin/main"
-          fi
-          echo "base_ref=$(git merge-base HEAD \"$base_ref\")" >> "$GITHUB_OUTPUT"
+          branch="${{ github.base_ref }}"
+          [ -n "$branch" ] || branch="main"
+          git fetch --no-tags --depth=200 origin "$branch"
+          echo "base_ref=$(git merge-base HEAD FETCH_HEAD)" >> "$GITHUB_OUTPUT"
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
