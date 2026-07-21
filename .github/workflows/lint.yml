@@ -27,7 +27,7 @@ jobs:
     name: golangci-lint
     strategy:
       matrix:
-        go-version: [1.23.x]
+        go-version: [1.25.x]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     env:
@@ -64,23 +64,19 @@ jobs:
         id: lint-base
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
         run: |
-          if [ -n "${{ github.base_ref }}" ]; then
-            base_ref="origin/${{ github.base_ref }}"
-          else
-            base_ref="origin/main"
-          fi
-          echo "base_ref=$(git merge-base HEAD \"$base_ref\")" >> "$GITHUB_OUTPUT"
+          branch="${{ github.base_ref }}"
+          [ -n "$branch" ] || branch="main"
+          git fetch --no-tags --depth=200 origin "$branch"
+          echo "base_ref=$(git merge-base HEAD FETCH_HEAD)" >> "$GITHUB_OUTPUT"
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.64.8
-          skip-pkg-cache: true
+          version: v2.12.2
           args: --timeout=10m --new-from-rev=${{ steps.lint-base.outputs.base_ref }} --whole-files
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.lint_scope == 'incremental' }}
       - name: golangci-lint full
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.64.8
-          skip-pkg-cache: true
+          version: v2.12.2
           args: --timeout=15m
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.lint_scope == 'full' }}
