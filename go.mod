@@ -10,7 +10,7 @@ require (
 	github.com/ethereum/go-ethereum v1.15.11
 	github.com/google/uuid v1.6.0
 	github.com/mocachain/moca-go-sdk v1.2.0-rc1.0.20260721044300-c9539ff96182
-	github.com/mocachain/moca/v2 v2.0.0-20260720092651-d939680046f4
+	github.com/mocachain/moca/v2 v2.0.0-rc0
 	github.com/rs/zerolog v1.35.1
 	github.com/urfave/cli/v2 v2.27.5
 	golang.org/x/term v0.44.0
