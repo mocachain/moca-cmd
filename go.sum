@@ -680,8 +680,8 @@ github.com/mocachain/moca-cosmos-sdk/x/nft v1.4.0-rc0 h1:PhlrPUUfJxS0pIQd5DI4f0A
 github.com/mocachain/moca-cosmos-sdk/x/nft v1.4.0-rc0/go.mod h1:VXDIhix1KIM09Ul1dQL2L7kwvRdQZBHCEIHtxgeW1Ho=
 github.com/mocachain/moca-cosmos-sdk/x/tx v1.4.0-rc0 h1:bzwvKcCSWjLnDwX9NikklG+BWNQ9DgjDoiUr/FHe5Ic=
 github.com/mocachain/moca-cosmos-sdk/x/tx v1.4.0-rc0/go.mod h1:br6Za5a0wln9liahVkSOwDrlPlrH8sAOw7O+YhQxRSk=
-github.com/mocachain/moca-go-sdk v1.2.0-rc1.0.20260721044300-c9539ff96182 h1:XPOpvuNHK3UYlal1gs1wFtgDge82k3O3lkytEELW0xM=
-github.com/mocachain/moca-go-sdk v1.2.0-rc1.0.20260721044300-c9539ff96182/go.mod h1:Y98VPOE9iYHv6ql2xFnvYFynvwyY5c0wgvsw3nf2qO8=
+github.com/mocachain/moca-go-sdk v1.3.0-rc0 h1:1JHKhh5dZHMA5jhTKAz77o0Bnt2rinR17cathv/4+NI=
+github.com/mocachain/moca-go-sdk v1.3.0-rc0/go.mod h1:idytIj5lntJCVhJ4FUh/nbvJBpIpyNQydQRyIXBOPpU=
 github.com/mocachain/moca/v2 v2.0.0-rc0 h1:Sh6240xrJqms1E/QC12PDjQyTjhCk0cqZYNvcUEwUGs=
 github.com/mocachain/moca/v2 v2.0.0-rc0/go.mod h1:f07curVdJeY675m4N/b4ayU4dyOjCU0zgFVD78MvB9M=
 github.com/mocachain/polygon-edge v1.3.3-moca.1 h1:YtHnpIxMOUkCFp6Z+BHt8wCb+35+HpCVMZ/dFUylzBs=
