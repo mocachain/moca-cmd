@@ -795,7 +795,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 			if err != nil {
 				return err
 			}
-			defer file.Close()
+			defer func() { _ = file.Close() }()
 			txnHash, err = mocaClient.CreateObject(c, bucketName, objectName, file, opts)
 			if err != nil {
 				return toCmdErr(err)
@@ -830,7 +830,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 	if err != nil {
 		return err
 	}
-	defer reader.Close()
+	defer func() { _ = reader.Close() }()
 
 	// if the file is more than 2G , it needs to force use resume uploading
 	if objectSize > maxPutWithoutResumeSize {
@@ -987,7 +987,7 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 			if err != nil {
 				return err
 			}
-			defer file.Close()
+			defer func() { _ = file.Close() }()
 			txnHash, err := mocaClient.CreateObject(c, bucketName, objectName, file, opts)
 			if err != nil {
 				return toCmdErr(err)
@@ -1014,7 +1014,7 @@ func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag Upload
 	if err != nil {
 		return err
 	}
-	defer reader.Close()
+	defer func() { _ = reader.Close() }()
 
 	// if the file is more than 2G , it needs to force use resume uploading
 	if objectSize > maxPutWithoutResumeSize {
@@ -1121,7 +1121,7 @@ func getObject(ctx *cli.Context) error {
 			return err
 		}
 
-		defer fd.Close()
+		defer func() { _ = fd.Close() }()
 
 		body, info, downloadErr := mocaClient.GetObject(c, bucketName, objectName, opt)
 		if downloadErr != nil {

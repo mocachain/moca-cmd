@@ -399,11 +399,12 @@ func parseActions(ctx *cli.Context, resourceType ResourceType) ([]permTypes.Acti
 	for _, v := range actionList {
 		var action permTypes.ActionType
 		var err error
-		if resourceType == ObjectResourceType {
+		switch resourceType {
+		case ObjectResourceType:
 			action, err = getObjectAction(v)
-		} else if resourceType == BucketResourceType {
+		case BucketResourceType:
 			action, isObjectActionInBucketPolicy, err = getBucketAction(v)
-		} else if resourceType == GroupResourceType {
+		case GroupResourceType:
 			action, err = getGroupAction(v)
 		}
 
@@ -580,7 +581,7 @@ func loadKeyStoreFile(ctx *cli.Context) ([]byte, string, error) {
 		defaultAddrFilePath := filepath.Join(homeDir, DefaultAccountPath)
 		fileContent, err := os.ReadFile(defaultAddrFilePath)
 		if err != nil {
-			return nil, "", fmt.Errorf("invalid default address" + err.Error())
+			return nil, "", errors.New("invalid default address" + err.Error())
 		}
 		if len(fileContent) != accountAddressLen {
 			return nil, "", fmt.Errorf("invalid default address length")
@@ -589,7 +590,7 @@ func loadKeyStoreFile(ctx *cli.Context) ([]byte, string, error) {
 		keyStorePath := filepath.Join(homeDir, DefaultKeyDir)
 		keyfilePath, err = getKeystoreFileByAddress(keyStorePath, string(fileContent))
 		if err != nil {
-			return nil, "", fmt.Errorf("failed to load the default keystore:" + err.Error())
+			return nil, "", errors.New("failed to load the default keystore:" + err.Error())
 		}
 	}
 
@@ -795,7 +796,7 @@ func getContentTypeOfFile(filePath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	// read the first bits of file for judgment of the mime type
 	buffer := make([]byte, bytesToReadForMIME)
