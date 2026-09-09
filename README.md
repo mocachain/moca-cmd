@@ -220,6 +220,19 @@ The files will be uploaded to the same bucket.
 moca-cmd object put  filepath1 filepath2 ...  mc://moca-bucket
 ```
 
+(6) delegated upload and content update
+
+With the --delegate flag the primary storage provider creates the object on chain on your behalf while the
+payload is uploaded, so no createObject transaction is signed locally; the command still waits for the object
+to be sealed. The same flag on "object update" replaces the content of a sealed object with a local file
+(the SP submits the content update on chain, uploads the new payload and the command waits for the seal).
+--delegate is not supported together with --recursive.
+
+```
+moca-cmd object put --delegate --contentType "text/plain" file-path moca://moca-bucket/moca-object
+moca-cmd object update --delegate new-file-path moca://moca-bucket/moca-object
+```
+
 #### Group Operations
 
 The group commands is used to create group, update group members, delete group and query group info.

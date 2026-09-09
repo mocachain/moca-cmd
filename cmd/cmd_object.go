@@ -40,7 +40,9 @@ Examples:
 # create object and upload file to storage provider, the corresponding object is moca-object
 $ moca-cmd object put file.txt moca://moca-bucket/moca-object,
 # upload the files inside the folders
-$ moca-cmd object put --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' --recursive folderName moca://bucket-name`,
+$ moca-cmd object put --tags='[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]' --recursive folderName moca://bucket-name
+# let the primary SP create the object on chain on your behalf (no local createObject txn), then upload and wait for the seal
+$ moca-cmd object put --delegate file.txt moca://moca-bucket/moca-object`,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  secondarySPFlag,
@@ -83,6 +85,12 @@ $ moca-cmd object put --tags='[{"key":"key1","value":"value1"},{"key":"key2","va
 				Name:  bypassSealFlag,
 				Value: false,
 				Usage: "if set this flag as true, it will not wait for the file to be sealed after the uploading is completed.",
+			},
+			&cli.BoolFlag{
+				Name:  delegateFlag,
+				Value: false,
+				Usage: "delegate the createObject txn to the primary SP: the object is created on chain on your behalf while the payload is uploaded, " +
+					"so no local transaction is signed. Not supported together with --recursive.",
 			},
 			&cli.StringFlag{
 				Name:  tagFlag,
@@ -177,20 +185,24 @@ $ moca-cmd object ls moca://moca-bucket`,
 	}
 }
 
-// cmdUpdateObject update the visibility of the object
+// cmdUpdateObject update the visibility of the object, or replace its content through the primary SP
 func cmdUpdateObject() *cli.Command {
 	return &cli.Command{
 		Name:      "update",
 		Action:    updateObject,
-		Usage:     "update object visibility",
-		ArgsUsage: "OBJECT-URL",
+		Usage:     "update object visibility, or replace the object content with --delegate",
+		ArgsUsage: "[filePath] OBJECT-URL",
 		Description: `
 Update the visibility of the object.
 The visibility value can be public-read, private or inherit.
+With --delegate the content of a sealed object is replaced instead: the primary SP submits the
+update on chain on your behalf, the new payload is uploaded and the command waits for the seal.
 
 Examples:
 update visibility of the moca-object
-$ moca-cmd object update --visibility=public-read  moca://moca-bucket/moca-object`,
+$ moca-cmd object update --visibility=public-read  moca://moca-bucket/moca-object
+replace the content of the moca-object with file.txt
+$ moca-cmd object update --delegate file.txt moca://moca-bucket/moca-object`,
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
 				Name: visibilityFlag,
@@ -199,6 +211,33 @@ $ moca-cmd object update --visibility=public-read  moca://moca-bucket/moca-objec
 					Default: privateType,
 				},
 				Usage: "set visibility of the bucket",
+			},
+			&cli.BoolFlag{
+				Name:  delegateFlag,
+				Value: false,
+				Usage: "replace the object content: [filePath] is uploaded and the primary SP updates the object on chain on your behalf",
+			},
+			&cli.StringFlag{
+				Name:  contentTypeFlag,
+				Value: "",
+				Usage: "indicate the content-type of the new content (with --delegate)",
+			},
+			&cli.Uint64Flag{
+				Name: partSizeFlag,
+				// the default part size is 32M
+				Value: 32 * 1024 * 1024,
+				Usage: "indicate the resumable upload 's part size of the new content (with --delegate). " +
+					"The part size is an integer multiple of the segment size.",
+			},
+			&cli.BoolFlag{
+				Name:  resumableFlag,
+				Value: false,
+				Usage: "indicate whether need to enable resumable upload of the new content (with --delegate).",
+			},
+			&cli.BoolFlag{
+				Name:  bypassSealFlag,
+				Value: false,
+				Usage: "if set this flag as true, it will not wait for the new content to be sealed after the uploading is completed (with --delegate).",
 			},
 		},
 	}
@@ -340,6 +379,9 @@ func setTagForObject(ctx *cli.Context) error {
 func putObject(ctx *cli.Context) error {
 	if ctx.NArg() < 1 {
 		return toCmdErr(fmt.Errorf("args number error"))
+	}
+	if ctx.Bool(delegateFlag) && ctx.Bool(recursiveFlag) {
+		return toCmdErr(errors.New("--delegate is not supported together with --recursive"))
 	}
 
 	var (
@@ -673,6 +715,7 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 	partSize := ctx.Uint64(partSizeFlag)
 	resumableUpload := ctx.Bool(resumableFlag)
 	bypassSeal := ctx.Bool(bypassSealFlag)
+	delegate := ctx.Bool(delegateFlag)
 
 	opts := sdktypes.CreateObjectOptions{}
 
@@ -717,10 +760,30 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 	c, cancelPutObject := context.WithCancel(globalContext)
 	defer cancelPutObject()
 
-	_, err := mocaClient.HeadObject(c, bucketName, objectName)
+	objectDetail, err := mocaClient.HeadObject(c, bucketName, objectName)
 	var txnHash string
 	// if err==nil, object exist on chain, no need to createObject
-	if err != nil {
+	if delegate {
+		// The primary SP submits the createObject txn on the uploader's behalf: a file is
+		// created while its payload is uploaded below, an empty folder needs its own request.
+		if uploadSingleFolder {
+			if err == nil {
+				fmt.Printf("object %s already exist \n", objectName)
+				return nil
+			}
+			if err = mocaClient.DelegateCreateFolder(c, bucketName, objectName, sdktypes.PutObjectOptions{ContentType: opts.ContentType, Visibility: opts.Visibility}); err != nil {
+				return toCmdErr(err)
+			}
+			fmt.Printf("object %s created on chain \n", objectName)
+			return setDelegatedObjectTags(c, mocaClient, bucketName, objectName, opts.Tags)
+		}
+		if objectSize == 0 {
+			return toCmdErr(errors.New("delegated upload needs a non-empty file, the SP rejects a zero payload size"))
+		}
+		if err == nil && objectDetail.ObjectInfo.GetObjectStatus() == storageTypes.OBJECT_STATUS_SEALED {
+			return toCmdErr(fmt.Errorf("object %s is already sealed, use 'object update --delegate' to replace its content", objectName))
+		}
+	} else if err != nil {
 		if uploadSingleFolder {
 			txnHash, err = mocaClient.CreateFolder(c, bucketName, objectName, opts)
 			if err != nil {
@@ -786,7 +849,22 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 		progressReader.LastPrinted = time.Now().Add(3 * time.Second)
 	}
 
-	if opt.DisableResumable {
+	if delegate {
+		// the SP records these on chain for us, there is no local createObject txn to carry them
+		opt.ContentType = opts.ContentType
+		opt.Visibility = opts.Visibility
+		if !opt.DisableResumable {
+			fmt.Printf("resumable uploading %s is beginning...\n", objectName)
+		}
+		if err = mocaClient.DelegatePutObject(c, bucketName, objectName,
+			objectSize, progressReader, opt); err != nil {
+			return toCmdErr(err)
+		}
+		fmt.Printf("object %s created on chain \n", objectName)
+		if err = setDelegatedObjectTags(c, mocaClient, bucketName, objectName, opts.Tags); err != nil {
+			return err
+		}
+	} else if opt.DisableResumable {
 		if err = mocaClient.PutObject(c, bucketName, objectName,
 			objectSize, progressReader, opt); err != nil {
 			return toCmdErr(err)
@@ -805,6 +883,12 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 	}
 
 	// Check if object is sealed
+	return waitObjectSealed(c, mocaClient, bucketName, objectName, urlInfo, "upload")
+}
+
+// waitObjectSealed polls HeadObject until the object is sealed and no content update is
+// pending any more, then prints "<verb> <object> to <url>". Gives up after one hour.
+func waitObjectSealed(c context.Context, mocaClient client.IClient, bucketName, objectName, urlInfo, verb string) error {
 	timeout := time.After(1 * time.Hour)
 	ticker := time.NewTicker(3 * time.Second)
 	count := 0
@@ -823,13 +907,30 @@ func uploadFile(bucketName, objectName, filePath, urlInfo string, ctx *cli.Conte
 			if count%10 == 0 {
 				fmt.Println("sealing...")
 			}
-			if headObjOutput.ObjectInfo.GetObjectStatus().String() == "OBJECT_STATUS_SEALED" {
+			if headObjOutput.ObjectInfo.GetObjectStatus().String() == "OBJECT_STATUS_SEALED" && !headObjOutput.ObjectInfo.GetIsUpdating() {
 				ticker.Stop()
-				fmt.Printf("upload %s to %s \n", objectName, urlInfo)
+				fmt.Printf("%s %s to %s \n", verb, objectName, urlInfo)
 				return nil
 			}
 		}
 	}
+}
+
+// setDelegatedObjectTags applies --tags to an object the primary SP created on the uploader's
+// behalf: the delegated create message carries no tags, so they need a SetTag txn of their own.
+func setDelegatedObjectTags(c context.Context, mocaClient client.IClient, bucketName, objectName string, tags *storageTypes.ResourceTags) error {
+	if tags == nil {
+		return nil
+	}
+	txnHash, err := mocaClient.SetTag(c, mocadTypes.NewObjectGRN(bucketName, objectName).String(), *tags, sdktypes.SetTagsOptions{})
+	if err != nil {
+		return toCmdErr(err)
+	}
+	if err = waitTxnStatus(mocaClient, c, txnHash, "SetTags"); err != nil {
+		return toCmdErr(err)
+	}
+	fmt.Println("transaction hash: ", txnHash)
+	return nil
 }
 
 func uploadFileByTask(bucketName, objectName, filePath string, uploadFlag UploadFlag,
@@ -1168,6 +1269,9 @@ func printListResult(listResult sdktypes.ListObjectsResult) {
 }
 
 func updateObject(ctx *cli.Context) error {
+	if ctx.Bool(delegateFlag) {
+		return delegateUpdateObjectContent(ctx)
+	}
 	if ctx.NArg() != 1 {
 		return toCmdErr(fmt.Errorf("args number should be one"))
 	}
@@ -1216,6 +1320,83 @@ func updateObject(ctx *cli.Context) error {
 	fmt.Printf("update object visibility finished, latest object visibility:%s\n", objectDetail.ObjectInfo.GetVisibility().String())
 	fmt.Println("transaction hash: ", txnHash)
 	return nil
+}
+
+// delegateUpdateObjectContent replaces the payload of a sealed object through the primary SP,
+// which submits the content update on chain on the updater's behalf, then waits for the seal.
+func delegateUpdateObjectContent(ctx *cli.Context) error {
+	if ctx.NArg() != 2 {
+		return toCmdErr(fmt.Errorf("args number should be two: the file path and the object url"))
+	}
+	filePath := ctx.Args().Get(0)
+	objectSize, err := parseFileByArg(ctx, 0)
+	if err != nil {
+		return toCmdErr(err)
+	}
+	if objectSize == 0 {
+		return toCmdErr(errors.New("the new object content must not be empty"))
+	}
+	urlInfo := ctx.Args().Get(1)
+	bucketName, objectName, err := ParseBucketAndObject(urlInfo)
+	if err != nil {
+		return toCmdErr(err)
+	}
+
+	mocaClient, err := NewClient(ctx, ClientOptions{IsQueryCmd: false})
+	if err != nil {
+		return toCmdErr(err)
+	}
+
+	contentType := ctx.String(contentTypeFlag)
+	if contentType == "" {
+		// parse the mimeType as content type
+		if mimeType, mimeErr := getContentTypeOfFile(filePath); mimeErr == nil {
+			contentType = mimeType
+		}
+	}
+	opt := sdktypes.PutObjectOptions{
+		ContentType:      contentType,
+		DisableResumable: !ctx.Bool(resumableFlag),
+		PartSize:         ctx.Uint64(partSizeFlag),
+	}
+	// if the file is more than 2G , it needs to force use resume uploading
+	if objectSize > maxPutWithoutResumeSize {
+		opt.DisableResumable = false
+	}
+
+	reader, err := os.Open(filePath)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = reader.Close() }()
+
+	progressReader := &ProgressReader{
+		Reader:      reader,
+		Total:       objectSize,
+		StartTime:   time.Now(),
+		LastPrinted: time.Now(),
+	}
+	// if print big file progress, the printing progress should be delayed to obtain a more accurate display.
+	if objectSize > progressDelayPrintSize {
+		progressReader.LastPrinted = time.Now().Add(3 * time.Second)
+	}
+
+	c, cancelUpdateObject := context.WithCancel(globalContext)
+	defer cancelUpdateObject()
+
+	if !opt.DisableResumable {
+		fmt.Printf("resumable uploading %s is beginning...\n", objectName)
+	}
+	if err = mocaClient.DelegateUpdateObjectContent(c, bucketName, objectName, objectSize, progressReader, opt); err != nil {
+		return toCmdErr(err)
+	}
+	fmt.Printf("object %s content update created on chain \n", objectName)
+
+	if ctx.Bool(bypassSealFlag) {
+		fmt.Printf("\nupdate %s to %s \n", objectName, urlInfo)
+		return nil
+	}
+	return waitObjectSealed(c, mocaClient, bucketName, objectName, urlInfo, "update")
 }
 
 func getUploadInfo(ctx *cli.Context) error {

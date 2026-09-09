@@ -55,6 +55,7 @@ const (
 	endOffsetFlag           = "end"
 	recursiveFlag           = "recursive"
 	bypassSealFlag          = "bypassSeal"
+	delegateFlag            = "delegate"
 	addMemberFlag           = "addMembers"
 	removeMemberFlag        = "removeMembers"
 	renewMemberFlag         = "renewMembers"
