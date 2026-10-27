@@ -66,8 +66,7 @@ func ListSP(ctx *cli.Context) error {
 
 	spInfo, err := client.ListStorageProviders(c, false)
 	if err != nil {
-		fmt.Println("fail to list SP:", err.Error())
-		return nil
+		return toCmdErr(fmt.Errorf("fail to list SP: %w", err))
 	}
 
 	if len(spInfo) == 0 {
@@ -154,14 +153,12 @@ func getQuotaPrice(ctx *cli.Context) error {
 
 	quotaPrice, err := price.ReadPrice.Float64()
 	if err != nil {
-		fmt.Println("get quota price error:", err.Error())
-		return err
+		return toCmdErr(fmt.Errorf("get quota price error: %w", err))
 	}
 
 	storagePrice, err := price.StorePrice.Float64()
 	if err != nil {
-		fmt.Println("get storage price error:", err.Error())
-		return err
+		return toCmdErr(fmt.Errorf("get storage price error: %w", err))
 	}
 
 	fmt.Println("get bucket read quota price:", quotaPrice, " wei/byte")

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -127,17 +128,19 @@ func headObject(ctx *cli.Context) error {
 
 	objectDetail, err := client.HeadObject(c, bucketName, objectName)
 	if err != nil {
-		fmt.Println("no such object")
-		return nil
+		return toCmdErr(errors.New("no such object"))
 	}
 
 	fmt.Println("latest object info:")
 	if format := ctx.String(formatFlag); format != "" {
-		if format == defaultFormat {
+		switch format {
+		case defaultFormat:
 			parseObjectInfo(objectDetail)
-		} else if format == jsonFormat {
-			parseByJsonFormat(objectDetail)
-		} else {
+		case jsonFormat:
+			if err = parseByJsonFormat(objectDetail); err != nil {
+				return toCmdErr(err)
+			}
+		default:
 			return toCmdErr(fmt.Errorf("invalid format"))
 		}
 	}
@@ -160,22 +163,23 @@ func headBucket(ctx *cli.Context) error {
 
 	bucketInfo, err := client.HeadBucket(c, bucketName)
 	if err != nil {
-		fmt.Println("no such bucket")
-		return nil
+		return toCmdErr(errors.New("no such bucket"))
 	}
 	gvgf, err := client.QueryVirtualGroupFamily(ctx.Context, bucketInfo.GlobalVirtualGroupFamilyId)
 	if err != nil {
-		fmt.Println("no such virtual group family:", bucketInfo.GlobalVirtualGroupFamilyId)
-		return err
+		return toCmdErr(fmt.Errorf("no such virtual group family: %d: %w", bucketInfo.GlobalVirtualGroupFamilyId, err))
 	}
 
 	fmt.Println("latest bucket info:")
 	if format := ctx.String(formatFlag); format != "" {
-		if format == defaultFormat {
+		switch format {
+		case defaultFormat:
 			parseBucketInfo(bucketInfo, gvgf)
-		} else if format == jsonFormat {
-			parseByJsonFormat(bucketInfo)
-		} else {
+		case jsonFormat:
+			if err = parseByJsonFormat(bucketInfo); err != nil {
+				return toCmdErr(err)
+			}
+		default:
 			return toCmdErr(fmt.Errorf("invalid format"))
 		}
 	}
@@ -203,20 +207,22 @@ func headGroup(ctx *cli.Context) error {
 
 	groupInfo, err := client.HeadGroup(c, groupName, groupOwner)
 	if err != nil {
-		fmt.Println("no such group")
-		return nil
+		return toCmdErr(errors.New("no such group"))
 	}
 
 	fmt.Println("latest group info:")
 	if format := ctx.String(formatFlag); format != "" {
-		if format == defaultFormat {
+		switch format {
+		case defaultFormat:
 			infoStr := strings.Split(groupInfo.String(), " ")
 			for _, info := range infoStr {
 				fmt.Println(info)
 			}
-		} else if format == jsonFormat {
-			parseByJsonFormat(groupInfo)
-		} else {
+		case jsonFormat:
+			if err = parseByJsonFormat(groupInfo); err != nil {
+				return toCmdErr(err)
+			}
+		default:
 			return toCmdErr(fmt.Errorf("invalid format"))
 		}
 	}
@@ -248,8 +254,7 @@ func headGroupMember(ctx *cli.Context) error {
 
 	exist := client.HeadGroupMember(c, groupName, groupOwner, headMember)
 	if !exist {
-		fmt.Println("the user does not exist in the group")
-		return nil
+		return toCmdErr(errors.New("the user does not exist in the group"))
 	}
 
 	fmt.Printf("the user %s is a member of the group: %s \n", headMember, groupName)

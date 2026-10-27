@@ -34,6 +34,9 @@ func showVersion(ctx *cli.Context) error {
 	return nil
 }
 
+// newSDKClient is replaced in tests
+var newSDKClient = client.New
+
 // NewClient returns a new moca client
 func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 	var (
@@ -46,30 +49,28 @@ func NewClient(ctx *cli.Context, opts ClientOptions) (client.IClient, error) {
 	if !opts.IsQueryCmd {
 		privateKey, _, err = parseKeystore(ctx)
 		if err != nil {
-			return nil, err
+			return nil, toCmdErr(err)
 		}
 
 		account, err = types.NewAccountFromPrivateKey("moca-account", privateKey)
 		if err != nil {
-			fmt.Println("new account err", err.Error())
-			return nil, err
+			return nil, toCmdErr(fmt.Errorf("new account err: %w", err))
 		}
 	}
 
 	rpcAddr, chainId, host, evmRpcAddress, err := getConfig(ctx)
 	if err != nil {
-		return nil, err
+		return nil, toCmdErr(err)
 	}
 
 	if host != "" {
-		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, privateKey, client.Option{DefaultAccount: account, Host: host, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
+		cli, err = newSDKClient(chainId, rpcAddr, evmRpcAddress, privateKey, client.Option{DefaultAccount: account, Host: host, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
 	} else {
-		cli, err = client.New(chainId, rpcAddr, evmRpcAddress, privateKey, client.Option{DefaultAccount: account, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
+		cli, err = newSDKClient(chainId, rpcAddr, evmRpcAddress, privateKey, client.Option{DefaultAccount: account, ForceToUseSpecifiedSpEndpointForDownloadOnly: opts.ForceToUseSpecifiedSpEndpointForDownloadOnly})
 	}
 
 	if err != nil {
-		fmt.Printf("failed to create client %s \n", err.Error())
-		return nil, err
+		return nil, toCmdErr(fmt.Errorf("failed to create client: %w", err))
 	}
 
 	return cli, nil

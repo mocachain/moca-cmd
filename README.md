@@ -84,6 +84,8 @@ All the other commands need to run with -k if the keystore is not on the default
 
 4. The "mc://" is a fixed prefix which representing the moca object or bucket.
 
+5. A command that fails prints `run command error: <reason>` once and exits with status 1, so scripts can rely on the exit status, for example `moca-cmd bucket head moca://bucket-name || echo "bucket not found"`.
+
 ### Examples
 
 #### Init Accounts

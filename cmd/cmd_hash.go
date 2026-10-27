@@ -49,12 +49,11 @@ func computeHashRoot(ctx *cli.Context) error {
 	if err != nil {
 		return toCmdErr(err)
 	}
-	defer fReader.Close()
+	defer func() { _ = fReader.Close() }()
 
 	hashes, size, _, err := mocaClient.ComputeHashRoots(fReader, false)
 	if err != nil {
-		fmt.Println("compute hash root fail:", err.Error())
-		return toCmdErr(err)
+		return toCmdErr(fmt.Errorf("compute hash root fail: %w", err))
 	}
 
 	fmt.Printf("the primary sp hash root: \n%s\n%s\n", hex.EncodeToString(hashes[0]), "the secondary sp hash list:")
