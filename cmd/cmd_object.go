@@ -444,6 +444,7 @@ func putObject(ctx *cli.Context) error {
 				return toCmdErr(errors.New("fail to parse bucket name"))
 			}
 
+			var failed int
 			for idx, fileName := range filePathList {
 				nameList := strings.Split(fileName, "/")
 				objectName = nameList[len(nameList)-1]
@@ -453,9 +454,13 @@ func putObject(ctx *cli.Context) error {
 				}
 
 				if err = uploadFile(bucketName, objectName, fileName, urlInfo, ctx, mocaClient, false, true, objectSize); err != nil {
-					fmt.Println("upload object:", objectName, "err", err)
+					failed++
+					_ = toCmdErr(fmt.Errorf("upload object %s: %w", objectName, err))
 				}
 				fmt.Println()
+			}
+			if failed > 0 {
+				return toCmdErr(fmt.Errorf("failed to upload %d of %d files", failed, len(filePathList)))
 			}
 		} else {
 			// upload single file
@@ -1142,8 +1147,7 @@ func getObject(ctx *cli.Context) error {
 
 		err = os.Rename(tempFilePath, filePath)
 		if err != nil {
-			fmt.Printf("failed to rename %s to %s \n", tempFilePath, filePath)
-			return nil
+			return toCmdErr(fmt.Errorf("failed to rename %s to %s: %w", tempFilePath, filePath, err))
 		}
 		fmt.Printf("\ndownload object %s, the file path is %s, content length:%d \n", objectName, filePath, uint64(info.Size))
 	}
@@ -1302,8 +1306,7 @@ func updateObject(ctx *cli.Context) error {
 
 	txnHash, err := client.UpdateObjectVisibility(c, bucketName, objectName, visibilityType, sdktypes.UpdateObjectOption{TxOpts: &TxnOptionWithSyncMode})
 	if err != nil {
-		fmt.Println("update object visibility error:", err.Error())
-		return nil
+		return toCmdErr(fmt.Errorf("update object visibility error: %w", err))
 	}
 
 	err = waitTxnStatus(client, c, txnHash, "UpdateObject")

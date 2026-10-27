@@ -74,8 +74,7 @@ func buyQuotaForBucket(ctx *cli.Context) error {
 
 	txnHash, err := client.BuyQuotaForBucket(c, bucketName, targetQuota, sdktypes.BuyQuotaOption{TxOpts: &TxnOptionWithSyncMode})
 	if err != nil {
-		fmt.Println("buy quota error:", err.Error())
-		return nil
+		return toCmdErr(fmt.Errorf("buy quota error: %w", err))
 	}
 
 	fmt.Printf("buy quota for bucket: %s \n", bucketName)

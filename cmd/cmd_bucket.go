@@ -358,8 +358,7 @@ func updateBucket(ctx *cli.Context) error {
 	opts.TxOpts = &TxnOptionWithSyncMode
 	txnHash, err := client.UpdateBucketInfo(c, bucketName, opts)
 	if err != nil {
-		fmt.Println("update bucket error:", err.Error())
-		return nil
+		return toCmdErr(fmt.Errorf("update bucket error: %w", err))
 	}
 
 	err = waitTxnStatus(client, c, txnHash, "UpdateBucket")
@@ -406,8 +405,7 @@ func migrateBucket(ctx *cli.Context) error {
 
 	txnHash, err := client.MigrateBucket(c, bucketName, uint32(dstPrimarySPID), opts)
 	if err != nil {
-		fmt.Println("migrate bucket error:", err.Error())
-		return nil
+		return toCmdErr(fmt.Errorf("migrate bucket error: %w", err))
 	}
 
 	err = waitTxnStatus(client, c, txnHash, "MigrateBucket")
@@ -439,8 +437,7 @@ func listBuckets(ctx *cli.Context) error {
 
 	spInfo, err := client.ListStorageProviders(c, true)
 	if err != nil {
-		fmt.Println("fail to get SP info to list bucket:", err.Error())
-		return nil
+		return toCmdErr(fmt.Errorf("fail to get SP info to list bucket: %w", err))
 	}
 
 	bucketListRes, err := client.ListBuckets(c, sdktypes.ListBucketsOptions{

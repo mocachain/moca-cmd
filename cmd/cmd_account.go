@@ -241,7 +241,9 @@ func importKey(ctx *cli.Context) error {
 	}
 
 	// if it is the first keystore, set it as the default key
-	checkAndWriteDefaultKey(homeDir, convertAddressToLower(key.Address.String()))
+	if err = checkAndWriteDefaultKey(homeDir, convertAddressToLower(key.Address.String())); err != nil {
+		return toCmdErr(err)
+	}
 
 	fmt.Printf("imported account: %s, keystore: %s \n", key.Address, keyFilePath)
 	return nil
@@ -368,8 +370,7 @@ func createAccount(ctx *cli.Context) error {
 	}
 
 	if _, err = os.Stat(keyFilePath); err == nil {
-		fmt.Println("key already exists at :", keyFilePath)
-		return nil
+		return toCmdErr(errors.New("key already exists at : " + keyFilePath))
 	} else if !os.IsNotExist(err) {
 		return toCmdErr(err)
 	}
@@ -395,7 +396,9 @@ func createAccount(ctx *cli.Context) error {
 	}
 
 	// if it is the first keystore, set it as the default key
-	checkAndWriteDefaultKey(homeDir, convertAddressToLower(key.Address.String()))
+	if err = checkAndWriteDefaultKey(homeDir, convertAddressToLower(key.Address.String())); err != nil {
+		return toCmdErr(err)
+	}
 
 	fmt.Printf("created new account: {%s}, keystore: %s \n", account.GetAddress(), keyFilePath)
 	return nil
@@ -490,35 +493,34 @@ func parseKeystore(ctx *cli.Context) (string, string, error) {
 	return privateKey, keyFile, nil
 }
 
-func checkAndWriteDefaultKey(homeDir string, content string) {
+func checkAndWriteDefaultKey(homeDir string, content string) error {
 	var err error
 	filePath := filepath.Join(homeDir, DefaultAccountPath)
 	_, err = os.Stat(filePath)
 	if os.IsNotExist(err) {
 		if err = os.MkdirAll(filepath.Dir(filePath), 0o700); err != nil {
-			fmt.Printf("failed to create directory %s, error: %v\n", filepath.Dir(filePath), err)
+			return fmt.Errorf("failed to create directory %s, error: %v", filepath.Dir(filePath), err)
 		}
 
 		err = os.WriteFile(filePath, []byte(content), 0o644)
 		if err != nil {
-			fmt.Printf("failed to write default keystore info %v \n", err)
-			return
+			return fmt.Errorf("failed to write default keystore info %v", err)
 		}
 	} else {
 		// file exist, check if it is empty
 		fileContent, readErr := os.ReadFile(filePath)
 		if readErr != nil {
-			fmt.Printf("read default keystore info fail %v \n", readErr)
-			return
+			return fmt.Errorf("read default keystore info fail %v", readErr)
 		}
 
 		if len(fileContent) == 0 {
 			err = os.WriteFile(filePath, []byte(content), 0o644)
 			if err != nil {
-				fmt.Printf("failed to write default keystore info %v \n", err)
+				return fmt.Errorf("failed to write default keystore info %v", err)
 			}
 		}
 	}
+	return nil
 }
 
 func isKeystoreExist(keystoreDir string, address string) bool {

@@ -90,8 +90,7 @@ func deleteBucket(ctx *cli.Context) error {
 
 	txnHash, err := client.DeleteBucket(c, bucketName, sdktypes.DeleteBucketOption{TxOpts: &TxnOptionWithSyncMode})
 	if err != nil {
-		fmt.Println("delete bucket error:", err.Error())
-		return nil
+		return toCmdErr(fmt.Errorf("delete bucket error: %w", err))
 	}
 
 	err = waitTxnStatus(client, c, txnHash, "DeleteBucket")
@@ -156,8 +155,8 @@ func deleteObject(ctx *cli.Context) error {
 			return toCmdErr(err)
 		}
 
-	} else {
-		deleteObjectAndWaitTxn(client, c, bucketName, objectName)
+	} else if err = deleteObjectAndWaitTxn(client, c, bucketName, objectName); err != nil {
+		return toCmdErr(err)
 	}
 
 	return nil
@@ -168,6 +167,7 @@ func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefi
 		listResult        sdktypes.ListObjectsResult
 		continuationToken string
 		err               error
+		failed            int
 	)
 
 	for {
@@ -183,8 +183,11 @@ func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefi
 
 		// TODO use one txn to broadcast multi delete object messages
 		for _, object := range listResult.Objects {
-			// no need to return err if some objects delete failed
-			deleteObjectAndWaitTxn(cli, c, bucketName, object.ObjectInfo.ObjectName)
+			// keep deleting the remaining objects, the failures are reported at the end
+			if delErr := deleteObjectAndWaitTxn(cli, c, bucketName, object.ObjectInfo.ObjectName); delErr != nil {
+				fmt.Println(delErr)
+				failed++
+			}
 		}
 
 		if !listResult.IsTruncated {
@@ -193,23 +196,25 @@ func deleteObjectByPage(cli client.IClient, c context.Context, bucketName, prefi
 
 		continuationToken = listResult.NextContinuationToken
 	}
+	if failed > 0 {
+		return fmt.Errorf("failed to delete %d object(s)", failed)
+	}
 	return nil
 }
 
-func deleteObjectAndWaitTxn(cli client.IClient, c context.Context, bucketName, objectName string) {
+func deleteObjectAndWaitTxn(cli client.IClient, c context.Context, bucketName, objectName string) error {
 	txnHash, err := cli.DeleteObject(c, bucketName, objectName, sdktypes.DeleteObjectOption{TxOpts: &TxnOptionWithSyncMode})
 	if err != nil {
-		fmt.Printf("failed to delete object %s err:%v\n", objectName, err)
-		return
+		return fmt.Errorf("failed to delete object %s err:%v", objectName, err)
 	}
 
 	err = waitTxnStatus(cli, c, txnHash, "DeleteObject")
 	if err != nil {
-		fmt.Printf("failed to query the txn of deleting object %s, err:%v\n", objectName, err)
-		return
+		return fmt.Errorf("failed to query the txn of deleting object %s, err:%v", objectName, err)
 	}
 
 	fmt.Printf("delete: %s\n", objectName)
+	return nil
 }
 
 // deleteGroup send the deleteGroup msg to moca

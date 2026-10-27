@@ -200,13 +200,19 @@ func getVisibilityType(visibility string) (storageTypes.VisibilityType, error) {
 	}
 }
 
+// toCmdErr prints err once and returns an error that makes the process exit with 1.
+// An error that was already reported passes through unchanged.
 func toCmdErr(err error) error {
+	var exitErr cli.ExitCoder
+	if errors.As(err, &exitErr) {
+		return exitErr
+	}
 	if strings.Contains(err.Error(), noBalanceErr) {
 		fmt.Println("The operator account have no balance, please transfer token to your account")
 	} else {
 		fmt.Printf("run command error: %s\n", err.Error())
 	}
-	return nil
+	return cli.Exit("", 1)
 }
 
 // parse object info meta on the chain
@@ -246,13 +252,13 @@ func getJsonMarshaler() *jsonpb.Marshaler {
 	}
 }
 
-func parseByJsonFormat(v proto.Message) {
+func parseByJsonFormat(v proto.Message) error {
 	jsonData, err := getJsonMarshaler().MarshalToString(v)
 	if err != nil {
-		fmt.Println("Error marshalling to JSON:", err)
-		return
+		return fmt.Errorf("error marshalling to JSON: %w", err)
 	}
 	fmt.Println(jsonData)
+	return nil
 }
 
 func parseBucketInfo(info *storageTypes.BucketInfo, gvgf *vgTypes.GlobalVirtualGroupFamily) {
@@ -433,8 +439,7 @@ func getPassword(ctx *cli.Context, needNotice bool) (string, error) {
 
 	bytePassword, err := term.ReadPassword(int(os.Stdin.Fd()))
 	if err != nil {
-		fmt.Println("read password err:", err)
-		return "", err
+		return "", fmt.Errorf("read password err: %w", err)
 	}
 	password := string(bytePassword)
 	fmt.Println()
