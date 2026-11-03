@@ -1,4 +1,4 @@
-FROM golang:1.23.6-bookworm AS builder
+FROM golang:1.26.10-bookworm AS builder
 
 ARG GITHUB_TOKEN
 RUN git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/"
@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     make build
 
 
-FROM golang:1.23.6-bookworm
+FROM golang:1.26.10-bookworm
 
 WORKDIR /root
 
