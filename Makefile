@@ -6,7 +6,7 @@ export
 
 # Keep local Go commands on the repository toolchain even when a newer
 # system-wide Go release is installed.
-GO_TOOLCHAIN ?= go1.25.8
+GO_TOOLCHAIN ?= go1.26.10
 GO := env GOTOOLCHAIN=$(GO_TOOLCHAIN) go
 
 # Configure git to use HTTPS+Token for private repositories if GITHUB_TOKEN is set
@@ -136,7 +136,7 @@ stop-dc:
 ###############################################################################
 
 PACKAGE_NAME:=github.com/evmos/evmos
-GOLANG_CROSS_VERSION  = v1.23
+GOLANG_CROSS_VERSION  = v1.26.10
 GOPATH ?= $(HOME)/go
 release-dry-run:
 	docker run \
