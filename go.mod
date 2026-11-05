@@ -150,7 +150,7 @@ require (
 	github.com/minio/highwayhash v1.0.4 // indirect
 	github.com/minio/sha256-simd v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/mocachain/moca-common/go v1.2.0-rc1 // indirect
+	github.com/mocachain/moca-common/go v1.3.0-rc1 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20230904125328-1f23a7beb09a // indirect
@@ -248,7 +248,6 @@ replace (
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/lyft/protoc-gen-validate => github.com/bufbuild/protoc-gen-validate v0.0.13
-	github.com/mocachain/moca-common/go => github.com/mocachain/moca-common/go v1.3.0-rc0
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 	github.com/wercker/journalhook => github.com/wercker/journalhook v0.0.0-20230927020745-64542ffa4117
 	nhooyr.io/websocket => nhooyr.io/websocket v1.8.17
