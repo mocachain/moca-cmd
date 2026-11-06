@@ -9,7 +9,7 @@ require (
 	github.com/cosmos/gogoproto v1.7.2
 	github.com/ethereum/go-ethereum v1.15.11
 	github.com/google/uuid v1.6.0
-	github.com/mocachain/moca-go-sdk v1.3.0-rc0.0.20260911071905-83384c087054
+	github.com/mocachain/moca-go-sdk v1.3.0-rc1
 	github.com/mocachain/moca/v2 v2.0.0-rc1
 	github.com/rs/zerolog v1.35.1
 	github.com/urfave/cli/v2 v2.27.5
