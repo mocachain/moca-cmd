@@ -34,8 +34,8 @@ cosmossdk.io/x/evidence v0.2.0/go.mod h1:zx/Xqy+hnGVzkqVuVuvmP9KsO6YCl4SfbAetYi+
 cosmossdk.io/x/upgrade v0.2.0 h1:ZHy0xny3wBCSLomyhE06+UmQHWO8cYlVYjfFAJxjz5g=
 cosmossdk.io/x/upgrade v0.2.0/go.mod h1:DXDtkvi//TrFyHWSOaeCZGBoiGAE6Rs8/0ABt2pcDD0=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
-filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
-filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
+filippo.io/edwards25519 v1.1.1 h1:YpjwWWlNmGIDyXOn8zLzqiD+9TyIlPhGFG96P39uBpw=
+filippo.io/edwards25519 v1.1.1/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
 github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 h1:/vQbFIOMbk2FiG/kXiLl8BRyzTWDw7gX/Hz7Dd5eDMs=
 github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4/go.mod h1:hN7oaIRCjzsZ2dE+yG5k+rsdt3qcwykqK6HVGcKwsw4=
 github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 h1:L/gRVlceqvL25UVaW/CKtUDjefjrs0SPonmDGUVOYP0=
@@ -575,8 +575,8 @@ github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/klauspost/compress v1.11.7/go.mod h1:aoV0uJVorq1K+umq18yTdKaF57EivdYsUV+/s2qKfXs=
 github.com/klauspost/compress v1.12.3/go.mod h1:8dP1Hq4DHOhN9w426knH3Rhby4rFm6D8eO+e+Dq5Gzg=
-github.com/klauspost/compress v1.18.5 h1:/h1gH5Ce+VWNLSWqPzOVn6XBO+vJbCNGvjoaGBFW2IE=
-github.com/klauspost/compress v1.18.5/go.mod h1:cwPg85FWrGar70rWktvGQj8/hthj3wpl0PGDogxkrSQ=
+github.com/klauspost/compress v1.18.7 h1:aUyZsS4kH3QTKurYhAOwAHxllVPnOthb3vPfnF1Ehjw=
+github.com/klauspost/compress v1.18.7/go.mod h1:cwPg85FWrGar70rWktvGQj8/hthj3wpl0PGDogxkrSQ=
 github.com/klauspost/cpuid/v2 v2.2.10 h1:tBs3QSyvjDyFTq3uoc/9xFpCuOsJQFNPiAhYdw2skhE=
 github.com/klauspost/cpuid/v2 v2.2.10/go.mod h1:hqwkgyIinND0mEev00jJYCxPNVRVXFQeu1XKlok6oO0=
 github.com/klauspost/reedsolomon v1.11.8 h1:s8RpUW5TK4hjr+djiOpbZJB4ksx+TdYbRH7vHQpwPOY=
@@ -668,8 +668,8 @@ github.com/mocachain/moca-cosmos-sdk/x/nft v1.4.0-rc0.0.20261029124406-176ec71f8
 github.com/mocachain/moca-cosmos-sdk/x/nft v1.4.0-rc0.0.20261029124406-176ec71f8cf4/go.mod h1:VXDIhix1KIM09Ul1dQL2L7kwvRdQZBHCEIHtxgeW1Ho=
 github.com/mocachain/moca-cosmos-sdk/x/tx v1.4.0-rc0.0.20261029124406-176ec71f8cf4 h1:sbdE1iC7oWMKhUz4FoeZoNwZZik1ALMhz2Qlesb0IbU=
 github.com/mocachain/moca-cosmos-sdk/x/tx v1.4.0-rc0.0.20261029124406-176ec71f8cf4/go.mod h1:br6Za5a0wln9liahVkSOwDrlPlrH8sAOw7O+YhQxRSk=
-github.com/mocachain/moca-go-sdk v1.3.0-rc0.0.20260911071905-83384c087054 h1:HQ5PDcVnuofzXoVR/VprhPbgnZDONgrwHGHz4PrLEag=
-github.com/mocachain/moca-go-sdk v1.3.0-rc0.0.20260911071905-83384c087054/go.mod h1:idytIj5lntJCVhJ4FUh/nbvJBpIpyNQydQRyIXBOPpU=
+github.com/mocachain/moca-go-sdk v1.3.0-rc1 h1:wrzbDo+/MNumM1FYQZaG2ck7YpZl0DyWu8/7lkdsnRM=
+github.com/mocachain/moca-go-sdk v1.3.0-rc1/go.mod h1:4WsTXJtLIpvboKx7bnDdM4frUBY9ETS+cF+fvTYZkP0=
 github.com/mocachain/moca/v2 v2.0.0-rc1 h1:r452257BiEGgSxe6zOdWnupUqh0tx+qyz1ZvwlXn1Z8=
 github.com/mocachain/moca/v2 v2.0.0-rc1/go.mod h1:dCKOkRBuCAF8PIYauxY9zAJkILPirIcZK9qiAWKd1aU=
 github.com/mocachain/polygon-edge v1.3.3-moca.1 h1:YtHnpIxMOUkCFp6Z+BHt8wCb+35+HpCVMZ/dFUylzBs=
