@@ -1,6 +1,6 @@
 module github.com/mocachain/moca-cmd
 
-go 1.26.10
+go 1.26.11
 
 require (
 	cosmossdk.io/math v1.5.3

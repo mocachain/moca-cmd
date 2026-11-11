@@ -6,7 +6,7 @@ export
 
 # Keep local Go commands on the repository toolchain even when a newer
 # system-wide Go release is installed.
-GO_TOOLCHAIN ?= go1.26.10
+GO_TOOLCHAIN ?= go1.26.11
 GO := env GOTOOLCHAIN=$(GO_TOOLCHAIN) go
 
 # Configure git to use HTTPS+Token for private repositories if GITHUB_TOKEN is set
@@ -136,6 +136,7 @@ stop-dc:
 ###############################################################################
 
 PACKAGE_NAME:=github.com/evmos/evmos
+# Release builds pin the Go compiler with GOTOOLCHAIN in the docker run targets below.
 GOLANG_CROSS_VERSION  = v1.26.10
 GOPATH ?= $(HOME)/go
 release-dry-run:
@@ -143,6 +144,7 @@ release-dry-run:
 		--rm \
 		--privileged \
 		-e CGO_ENABLED=1 \
+		-e GOTOOLCHAIN=go1.26.11 \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
 		-v ${GOPATH}/pkg:/go/pkg \
@@ -159,6 +161,7 @@ release:
 		--rm \
 		--privileged \
 		-e CGO_ENABLED=1 \
+		-e GOTOOLCHAIN=go1.26.11 \
 		--env-file .release-env \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v `pwd`:/go/src/$(PACKAGE_NAME) \
